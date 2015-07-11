@@ -13,6 +13,7 @@ def Get_Letters(word, lang):
                         "m": "מ", "n": "נ", "s": "ס", "y": "ע",
                         "p": "פ", "c": "צ", "q": "ק", "r": "ר",
                         "e": "ש", "t": "ת"}
+
         eng_heb_dict_fin = {"a": "א", "b": "ב", "g": "ג", "d": "ד",
                             "h": "ה", "w": "ו", "z": "ז", "x": "ח",
                             "v": "ט", "i": "י", "l": "ל", "s": "ס",
@@ -38,6 +39,7 @@ def Get_Letters(word, lang):
             try:
                 word = word.replace(fin_letter, eng_heb_dict_fin[fin_letter])
             except Exception:
+                # Word not in dictionary
                 return word
 
         return word
