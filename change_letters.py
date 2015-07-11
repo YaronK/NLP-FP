@@ -7,6 +7,7 @@ Created on 7 ביול 2015
 
 
 def Get_Letters(word, lang):
+       
         eng_heb_dict = {"a": "א", "b": "ב", "g": "ג", "d": "ד",
                         "h": "ה", "w": "ו", "z": "ז", "x": "ח",
                         "v": "ט", "i": "י", "k": "כ", "l": "ל",
