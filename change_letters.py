@@ -4,6 +4,7 @@ Created on 7 ביול 2015
 
 @author: Gilad
 '''
+import re
 
 
 def replace_all(text, dic):
@@ -12,7 +13,7 @@ def replace_all(text, dic):
     return text
 
 
-def GetLetters(word, lang):
+def GetLetters(word, input_word):
     eng_heb_dict = {"a": "א", "b": "ב", "g": "ג", "d": "ד",
                     "h": "ה", "w": "ו", "z": "ז", "x": "ח",
                     "v": "ט", "i": "י", "k": "כ", "l": "ל",
@@ -35,11 +36,15 @@ def GetLetters(word, lang):
                     "ש": "e", "ת": "t", "ם": "m", "ן": "n",
                     "ץ": "c", "ך": "k", "ף": "p"}
 
-    if lang == "heb":
-        word = replace_all(word, heb_eng_dict)
-    else:
+    if re.search('[a-zA-Z]', word):
+        # Case input word is already in English
+        if input_word:
+            return word
+        # Handle final letter in Hebrew
         word_start = replace_all(word[:-1], eng_heb_dict)
         word_final = replace_all(word[len(word) - 1], eng_heb_dict_fin)
         word = word_start + word_final
-
+    else:
+        # Translate from Hebrew to "Jibrish"
+        word = replace_all(word, heb_eng_dict)
     return word

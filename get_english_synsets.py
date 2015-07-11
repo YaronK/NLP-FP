@@ -13,52 +13,46 @@ import change_letters
 
 
 class GetEnglishSynsets:
-    @staticmethod
-    def get_synsets(similar_words, synsets_number):
+    def __init__(self):
         # Initialize
-        all_synsets = {}
+        self.all_synsets = {}
+        self.vectors_path = "vectors-g.bin"
+        self.top_n = 500
+
+    def get_synsets(self, similar_words):
         synsets_counter = 0
-
         for word in similar_words:
-            if synsets_counter < synsets_number:
-                try:
-                    heb_word = change_letters.GetLetters(word[0], "eng")
-                except Exception:
-                    # Probably an English word in the corpora
-                    continue
-                # Get synsets
-                word_synsets = wn.synsets(heb_word, lang='heb')
+            if synsets_counter >= self.synsets_number:
+                break
+            heb_word = change_letters.GetLetters(word[0], False)
 
-                # Add known synsets to the sets
-                if len(word_synsets) > 0:
-                    synsets_counter += 1
-                    for synset in word_synsets:
-                        all_synsets[synset] = word[1]
-                    print("{0} ({1}), Is {2:.3f} similar. Synsets are: {3}"
-                          .format(word[0], heb_word, word[1], word_synsets))
+            # Get Synsets
+            word_synsets = wn.synsets(heb_word, lang='heb')
 
-        return all_synsets
+            # Add known synsets to the sets
+            if len(word_synsets) > 0:
+                synsets_counter += 1
+                for synset in word_synsets:
+                    self.all_synsets[synset] = word[1]
 
-    @staticmethod
-    def word_2_vec(heb_word, synsets_number):
-        vectors_path = "vectors-g.bin"
-
+    def word_2_vec(self, heb_word):
         # Get word2vec model
         print("Starting Word2Vec Learning...")
-        model = Word2Vec.load_word2vec_format(vectors_path, binary=True)
+        model = Word2Vec.load_word2vec_format(self.vectors_path, binary=True)
 
-        return model.most_similar(heb_word, topn=500)
+        return model.most_similar(heb_word, topn=self.top_n)
 
-    @staticmethod
-    def get_english_synsets():
-        heb_word = input("Please write an Hebrew word\n")
-        if re.search('[a-zA-Z]', heb_word):
-            eng_word = heb_word
-        else:
-            eng_word = change_letters.GetLetters(heb_word, "heb")
+    def get_english_synsets(self):
+        # Get an Hebrew word for an input
+        print("Please write an Hebrew word\n")
+        heb_word = change_letters.GetLetters(input(), True)
 
-        synsets_number = int(input("Please Enter number of wanted synsets\n"))
-        similar_words = GetEnglishSynsets.word_2_vec(eng_word, synsets_number)
+        # Get n most similar words
+        print("Enter number of wanted Synsets\n")
+        self.synsets_number = int(input())
+        similar_words = self.word_2_vec(heb_word)
 
-        print("Synsets for: {0}".format(heb_word))
-        return GetEnglishSynsets.get_synsets(similar_words, synsets_number)
+        # Get and return all Synsets
+        self.get_synsets(similar_words)
+
+        return self.all_synsets
