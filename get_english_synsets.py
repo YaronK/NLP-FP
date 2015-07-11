@@ -50,9 +50,10 @@ class GetEnglishSynsets:
     @staticmethod
     def get_english_synsets(heb_word):
         eng_word = change_letters.GetLetters(heb_word, "heb")
+        print(eng_word)
 
         synset_number = int(input("Please Enter number of wanted synsets\n"))
-        similar_words = es.word_2_vec(eng_word, synset_number)
+        similar_words = GetEnglishSynsets.word_2_vec(eng_word, synset_number)
 
         print("Synsets for: {0}".format(heb_word))
-        all_synsets = es.get_synsets(similar_words, synset_number)
+        all_synsets = GetEnglishSynsets.get_synsets(similar_words, synset_number)
