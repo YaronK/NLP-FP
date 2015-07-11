@@ -2,12 +2,11 @@
 
 from get_english_synsets import GetEnglishSynsets
 
+
 def main():
     es = GetEnglishSynsets()
 
-    heb_word = input("Please Write an Hebrew word, In Hebrew characters\n")
-
-    all_synets = es.get_english_synsets(heb_word)
+    all_synets = es.get_english_synsets()
 
 if __name__ == '__main__':
     main()

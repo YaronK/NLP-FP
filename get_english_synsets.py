@@ -4,6 +4,8 @@ Created on 7 ביול 2015
 
 @author: Gilad
 '''
+import re
+
 from nltk.corpus import wordnet as wn
 from gensim.models import Word2Vec
 
@@ -48,12 +50,15 @@ class GetEnglishSynsets:
         return model.most_similar(heb_word, topn=500)
 
     @staticmethod
-    def get_english_synsets(heb_word):
-        eng_word = change_letters.GetLetters(heb_word, "heb")
-        print(eng_word)
+    def get_english_synsets():
+        heb_word = input("Please write an Hebrew word\n")
+        if re.search('[a-zA-Z]', heb_word):
+            eng_word = heb_word
+        else:
+            eng_word = change_letters.GetLetters(heb_word, "heb")
 
-        synset_number = int(input("Please Enter number of wanted synsets\n"))
-        similar_words = GetEnglishSynsets.word_2_vec(eng_word, synset_number)
+        synset_num = int(input("Please Enter number of wanted synsets\n"))
+        similar_words = GetEnglishSynsets.word_2_vec(eng_word, synset_num)
 
         print("Synsets for: {0}".format(heb_word))
-        all_synsets = GetEnglishSynsets.get_synsets(similar_words, synset_number)
+        all_synsets = GetEnglishSynsets.get_synsets(similar_words, synset_num)
