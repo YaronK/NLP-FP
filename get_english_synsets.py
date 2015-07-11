@@ -10,8 +10,9 @@ from gensim.models import Word2Vec
 import change_letters
 
 
-class get_english_synsets:
-    def get_synsets(self, similar_words, synsets_number):
+class GetEnglishSynsets:
+    @staticmethod
+    def get_synsets(similar_words, synsets_number):
         # Initialize
         all_synsets = {}
         synsets_counter = 0
@@ -19,7 +20,7 @@ class get_english_synsets:
         for word in similar_words:
             if synsets_counter < synsets_number:
                 try:
-                    heb_word = change_letters.Get_Letters(word[0], "eng")
+                    heb_word = change_letters.GetLetters(word[0], "eng")
                 except Exception:
                     # Probably an English word in the corpora
                     continue
@@ -36,7 +37,8 @@ class get_english_synsets:
 
         return all_synsets
 
-    def word_2_vec(self, heb_word, synsets_number):
+    @staticmethod
+    def word_2_vec(heb_word, synsets_number):
         vectors_path = "vectors-g.bin"
 
         # Get word2vec model
@@ -45,20 +47,12 @@ class get_english_synsets:
 
         return model.most_similar(heb_word, topn=500)
 
+    @staticmethod
+    def get_english_synsets(heb_word):
+        eng_word = change_letters.GetLetters(heb_word, "heb")
 
-def main():
-    es = get_english_synsets()
+        synset_number = int(input("Please Enter number of wanted synsets\n"))
+        similar_words = es.word_2_vec(eng_word, synset_number)
 
-    heb_word = input("Please Write an Hebrew word, In Hebrew characters\n")
-    eng_word = change_letters.Get_Letters(heb_word, "heb")
-
-    synset_number = int(input("Please Enter number of wanted synsets\n"))
-    similar_words = es.word_2_vec(eng_word, synset_number)
-
-    print("Synsets for: {0}".format(heb_word))
-    all_synsets = es.get_synsets(similar_words, synset_number)
-    # TODO: Call Yarons Method
-
-
-if __name__ == '__main__':
-    main()
+        print("Synsets for: {0}".format(heb_word))
+        all_synsets = es.get_synsets(similar_words, synset_number)
