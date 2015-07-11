@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from nltk.corpus import wordnet as wn
 
+
 class SynsetEdge(object):
     """docstring for SynsetEdge"""
     def __init__(self, hypernym_node, hyponym_node):
         super(SynsetEdge, self).__init__()
-        
+
         self.hypernym_node = hypernym_node
         self.hyponym_node = hyponym_node
 
@@ -20,12 +21,13 @@ class SynsetEdge(object):
         self.probability = probability
         self.hyponym_node.add_probability(probability)
 
+
 class SynsetNode(object):
     """docstring for SynsetNode"""
     def __init__(self, synset):
         super(SynsetNode, self).__init__()
         self.synset = synset
-        
+
         self.hypernym_edges = {}  # hypernym_synset_name => SynsetEdge
         self.hyponym_edges = {}  # hyponym_synset_name => SynsetEdge
 
@@ -34,25 +36,26 @@ class SynsetNode(object):
 
     def add_weight(self, weight):
         self.weight += weight
-        
+
         weight_per_hypernym = weight / float(len(self.hypernym_edges))
         for hypernym_edge in self.hypernym_edges:
             hypernym_edge.set_weight(weight_per_hypernym)
 
     def add_probability(self, probability):
         self.probability += probability
-        
+
         probability_per_hyponym = probability / float(len(self.hyponym_edges))
         for hyponym_edge in self.hyponym_edges:
-            hypernym_edge.set_probability(probability_per_hyponym)
+            hyponym_edge.set_probability(probability_per_hyponym)
 
     def add_hypernym(self, hypernym_node):
         hypernym_name = hypernym_node.synset.name()
-        
+
         if hypernym_name not in self.hypernym_edges:
             edge = SynsetEdge(hypernym_node, self)
             self.hypernym_edges[hypernym_name] = edge
             hypernym_node.hyponym_edges[self.synset.name()] = edge
+
 
 class SynsetGraph(object):
     """docstring for SynsetGraph"""
