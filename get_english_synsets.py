@@ -57,8 +57,8 @@ class GetEnglishSynsets:
         else:
             eng_word = change_letters.GetLetters(heb_word, "heb")
 
-        synset_num = int(input("Please Enter number of wanted synsets\n"))
-        similar_words = GetEnglishSynsets.word_2_vec(eng_word, synset_num)
+        synsets_number = int(input("Please Enter number of wanted synsets\n"))
+        similar_words = GetEnglishSynsets.word_2_vec(eng_word, synsets_number)
 
         print("Synsets for: {0}".format(heb_word))
-        all_synsets = GetEnglishSynsets.get_synsets(similar_words, synset_num)
+        return GetEnglishSynsets.get_synsets(similar_words, synsets_number)
