@@ -4,7 +4,6 @@ Created on 7 ביול 2015
 
 @author: Gilad
 '''
-import re
 
 from nltk.corpus import wordnet as wn
 from gensim.models import Word2Vec
@@ -44,11 +43,11 @@ class GetEnglishSynsets:
 
     def get_english_synsets(self):
         # Get an Hebrew word for an input
-        print("Please write an Hebrew word\n")
+        print("Please write an Hebrew word")
         heb_word = change_letters.GetLetters(input(), True)
 
         # Get n most similar words
-        print("Enter number of wanted Synsets\n")
+        print("Enter number of wanted Synsets")
         self.synsets_number = int(input())
         similar_words = self.word_2_vec(heb_word)
 

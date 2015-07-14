@@ -12,7 +12,7 @@ def main():
     graph = SynsetGraph(all_synets)
 
     for leaf_node in graph.leaf_nodes:
-        print(leaf_node.synset.name() + " " + leaf_node.probability)
+        print(str(leaf_node.synset.name()) + " " + str(leaf_node.probability))
 
 if __name__ == '__main__':
     main()
