@@ -1,81 +1,62 @@
 # -*- coding: utf-8 -*-
 
 
-class SynsetEdge(object):
-    """docstring for SynsetEdge"""
-    def __init__(self, hypernym_node, hyponym_node):
-        super(SynsetEdge, self).__init__()
-
-        self.hypernym_node = hypernym_node
-        self.hyponym_node = hyponym_node
-
-        self.weight = 0
-        self.probability = 0
-
-    def add_weight(self, weight):
-        self.weight += weight
-        self.hypernym_node.add_weight(weight)
-
-    def set_probability(self, probability):
-        self.probability = probability
-        self.hyponym_node.add_probability(probability)
-
-    def __str__(self):
-        return "<{},{}>".format(str(self.hyponym_node),
-                                str(self.hypernym_node))
-
-
 class SynsetNode(object):
-    """docstring for SynsetNode"""
     def __init__(self, synset):
         super(SynsetNode, self).__init__()
         self.synset = synset
 
-        self.hypernym_edges = {}  # hypernym_synset_name => SynsetEdge
-        self.hyponym_edges = {}  # hyponym_synset_name => SynsetEdge
-
-        self.weight = 0
-        self.probability = 0
-
-    def add_weight(self, weight):
-        self.weight += weight
-
-        if len(self.hypernym_edges) != 0:
-            weight_per_hypernym = weight / float(len(self.hypernym_edges))
-            for hypernym_edge in self.hypernym_edges.values():
-                hypernym_edge.add_weight(weight_per_hypernym)
-
-    def add_probability(self, probability):
-        if self.probability == 0:
-            self.probability += probability
-        elif len(self.hypernym_edges.values()) > 1:
-            self.probability += probability
-        else:
-            self.probability = probability
-
-        if len(self.hyponym_edges) != 0:
-            for hyponym_edge in self.hyponym_edges.values():
-                hyponym_probability = ((hyponym_edge.weight / self.weight) *
-                                       self.probability)
-                hyponym_edge.set_probability(hyponym_probability)
+        self.hypernym_nodes = dict()  # hypernym_node : probability
+        self.hyponym_nodes = dict()  # hyponym_node : weight
 
     def add_hypernym(self, hypernym_node):
-        hypernym_name = hypernym_node.synset.name()
+        if hypernym_node not in self.hypernym_nodes:
+            self.hypernym_nodes[hypernym_node] = 0
 
-        if hypernym_name not in self.hypernym_edges:
-            edge = SynsetEdge(hypernym_node, self)
-            self.hypernym_edges[hypernym_name] = edge
-            hypernym_node.hyponym_edges[self.synset.name()] = edge
+    def add_hyponym(self, hyponym_node):
+        if hyponym_node not in self.hyponym_nodes:
+            self.hyponym_nodes[hyponym_node] = 0
+
+    def add_weight(self, weight, from_hyponym=None):
+        if from_hyponym is None:
+            self._total_weight = weight
+        else:
+            self.hyponym_nodes[from_hyponym] += weight
+
+        weight_per_hypernym = (0 if (len(self.hypernym_nodes) == 0) else
+                               weight / float(len(self.hypernym_nodes)))
+        for hypernym_node in self.hypernym_nodes:
+            hypernym_node.add_weight(weight_per_hypernym, self)
+
+    def add_probability(self, probability, from_hypernym=None):
+        if from_hypernym is None:
+            self._total_probability = probability
+        else:
+            self.hypernym_nodes[from_hypernym] += probability
+
+        for hyponym_node in self.hyponym_nodes:
+            hyponym_probability = ((self.hyponym_nodes[hyponym_node] /
+                                    self.total_weight()) * probability)
+            hyponym_node.add_probability(hyponym_probability, self)
+
+    def total_weight(self):
+        if not hasattr(self, "_total_weight"):
+            self._total_weight = sum(self.hyponym_nodes.values())
+        return self._total_weight
+
+    def total_probability(self):
+        if not hasattr(self, "_total_probability"):
+            self._total_probability = sum(self.hypernym_nodes.values())
+        return self._total_probability
 
     def __repr__(self):
-        return str(self) + " (prob.: {0:.4f})".format(self.probability)
+        return str(self) + " ({0:.3f})".format(self.total_probability())
 
     def __str__(self):
         return self.synset.name()
 
 
 class SynsetGraph(object):
-    """docstring for SynsetGraph"""
     def __init__(self, synset_weight_dict):
         super(SynsetGraph, self).__init__()
 
@@ -90,12 +71,9 @@ class SynsetGraph(object):
                                   for synset in hypernym_path}
         self.synset_nodes = synset_nodes = {synset: SynsetNode(synset)
                                             for synset in synsets}
-        self.leaf_nodes = {self.synset_nodes[synset]
-                           for synset in leaf_synsets}
+        self.leaf_nodes = {synset_nodes[synset] for synset in leaf_synsets}
 
         for leaf in leaf_synsets:
-            leaf_node = synset_nodes[leaf]
-
             for hypernym_path in leaf.hypernym_paths():
                 for i in range(1, len(hypernym_path)):
 
@@ -103,6 +81,7 @@ class SynsetGraph(object):
                     hypernym_node = synset_nodes[hypernym_path[i - 1]]
 
                     hyponym_node.add_hypernym(hypernym_node)
+                    hypernym_node.add_hyponym(hyponym_node)
 
         for leaf in leaf_synsets:
             leaf_node = synset_nodes[leaf]
@@ -121,5 +100,5 @@ class SynsetGraph(object):
 
     def _print_node(self, node, indentation):
         print("|   " * indentation + repr(node))
-        for hyponym_edge in node.hyponym_edges.values():
-            self._print_node(hyponym_edge.hyponym_node, indentation + 1)
+        for hyponym_node in node.hyponym_nodes:
+            self._print_node(hyponym_node, indentation + 1)

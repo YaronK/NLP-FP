@@ -17,6 +17,19 @@ def main():
 
     graph = SynsetGraph(all_synets)
 
+    print("")
+    print("len(node.hypernym_nodes) > 1:")
+    for node in graph.synset_nodes.values():
+        if len(node.hypernym_nodes) > 1:
+            print(node)
+
+    print("")
+    print("len(node.hyponym_nodes) > 1:")
+    for node in graph.synset_nodes.values():
+        if len(node.hyponym_nodes) > 1:
+            print(node)
+
+    print("")
     graph.print_tree()
 
 if __name__ == '__main__':
