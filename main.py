@@ -10,7 +10,7 @@ def main():
     print("Enter number of wanted Synsets")
     # synsets_number = input()
     word = "חתול"
-    synsets_number = "3"
+    synsets_number = "10"
 
     es = EnglishSynsets(word, synsets_number)
     all_synets = es.get_english_synsets()
