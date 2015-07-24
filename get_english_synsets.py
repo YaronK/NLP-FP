@@ -11,9 +11,11 @@ from gensim.models import Word2Vec
 import change_letters
 
 
-class GetEnglishSynsets:
-    def __init__(self):
+class EnglishSynsets:
+    def __init__(self, _word, _synsets_number):
         # Initialize
+        self.word = _word
+        self.synsets_number = int(_synsets_number)
         self.all_synsets = {}
         self.vectors_path = "vectors-g.bin"
         self.top_n = 500
@@ -42,13 +44,10 @@ class GetEnglishSynsets:
         return model.most_similar(heb_word, topn=self.top_n)
 
     def get_english_synsets(self):
-        # Get an Hebrew word for an input
-        print("Please write an Hebrew word")
-        heb_word = change_letters.GetLetters(input(), True)
+        heb_word = change_letters.GetLetters(self.word, True)
 
         # Get n most similar words
-        print("Enter number of wanted Synsets")
-        self.synsets_number = int(input())
+        self.synsets_number = self.synsets_number
         similar_words = self.word_2_vec(heb_word)
 
         # Get and return all Synsets
