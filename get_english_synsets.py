@@ -28,7 +28,7 @@ class EnglishSynsets:
             if self.synsets_number < 1:
                 break
             heb_word = change_letters.GetLetters(similar_word[0])
-            print(heb_word)
+
             # Get Synsets
             word_synsets = wn.synsets(heb_word, lang='heb')
 
