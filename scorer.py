@@ -64,6 +64,9 @@ class SynsetNode(object):
     def __repr__(self):
         return "Node({})".format(self.synset)
 
+    def __str__(self):
+        return self.synset.name() + " (prob. {})".format(self.probability)
+
 
 class SynsetGraph(object):
     """docstring for SynsetGraph"""
@@ -72,14 +75,17 @@ class SynsetGraph(object):
 
         leaf_synsets = set(synset_weight_dict.keys())
 
-        hypernym_paths = [hypernym_path for
-                          synset in leaf_synsets for
-                          hypernym_path in synset.hypernym_paths()]
-        print(hypernym_paths)
-        synsets = {synset for hypernym_path in
-                   hypernym_paths for synset in hypernym_path}
-        print(synsets)
-        synset_nodes = {synset: SynsetNode(synset) for synset in synsets}
+        hypernym_paths = [hypernym_path
+                          for synset in leaf_synsets
+                          for hypernym_path in synset.hypernym_paths()]
+
+        self.synsets = synsets = {synset
+                                  for hypernym_path in hypernym_paths
+                                  for synset in hypernym_path}
+        self.synset_nodes = synset_nodes = {synset: SynsetNode(synset)
+                                            for synset in synsets}
+        self.leaf_nodes = {self.synset_nodes[synset]
+                           for synset in leaf_synsets}
 
         for leaf in leaf_synsets:
             leaf_node = synset_nodes[leaf]
@@ -96,13 +102,19 @@ class SynsetGraph(object):
             leaf_node = synset_nodes[leaf]
             leaf_node.add_weight(synset_weight_dict[leaf])
 
-        entity_synset = [synset for
-                         synset in synsets if
-                         synset.name() == "entity.n.01"][0]
-        entity_node = synset_nodes[entity_synset]
+        self.get_entity_node().add_probability(1)
 
-        entity_node.add_probability(1)
+    def get_entity_node(self):
+        entity_synset = [synset
+                         for synset in self.synsets
+                         if synset.name() == "entity.n.01"][0]
+        return self.synset_nodes[entity_synset]
 
-        self.synset_nodes = synset_nodes
-        self.leaf_nodes = {self.synset_nodes[synset]
-                           for synset in leaf_synsets}
+    def print_tree(self):
+        self._print_node(self.get_entity_node(), 0)
+
+    def _print_node(self, node, indentation):
+        print("   " * indentation),
+        print(str(node))
+        for hyponym_edge in node.hyponym_edges:
+            self._print_node(hyponym_edge.hyponym_node, indentation + 1)
