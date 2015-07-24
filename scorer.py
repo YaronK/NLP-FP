@@ -20,8 +20,9 @@ class SynsetEdge(object):
         self.probability = probability
         self.hyponym_node.add_probability(probability)
 
-    def __repr__(self):
-        return "<{}{}>".format(self.hyponym_node, self.hypernym_node)
+    def __str__(self):
+        return "<{},{}>".format(str(self.hyponym_node),
+                                str(self.hypernym_node))
 
 
 class SynsetNode(object):
@@ -62,10 +63,10 @@ class SynsetNode(object):
             hypernym_node.hyponym_edges[self.synset.name()] = edge
 
     def __repr__(self):
-        return "Node({})".format(self.synset)
+        return str(self) + " (prob. {0:.3f})".format(self.probability)
 
     def __str__(self):
-        return self.synset.name() + " (prob. {})".format(self.probability)
+        return self.synset.name()
 
 
 class SynsetGraph(object):
@@ -114,7 +115,6 @@ class SynsetGraph(object):
         self._print_node(self.get_entity_node(), 0)
 
     def _print_node(self, node, indentation):
-        print("   " * indentation),
-        print(str(node))
-        for hyponym_edge in node.hyponym_edges:
+        print("   " * indentation + repr(node))
+        for hyponym_edge in node.hyponym_edges.values():
             self._print_node(hyponym_edge.hyponym_node, indentation + 1)
