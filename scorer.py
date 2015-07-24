@@ -46,7 +46,12 @@ class SynsetNode(object):
                 hypernym_edge.add_weight(weight_per_hypernym)
 
     def add_probability(self, probability):
-        self.probability += probability
+        if self.probability == 0:
+            self.probability += probability
+        elif len(self.hypernym_edges.values()) > 1:
+            self.probability += probability
+        else:
+            self.probability = probability
 
         if len(self.hyponym_edges) != 0:
             for hyponym_edge in self.hyponym_edges.values():
@@ -63,7 +68,7 @@ class SynsetNode(object):
             hypernym_node.hyponym_edges[self.synset.name()] = edge
 
     def __repr__(self):
-        return str(self) + " (prob.: {0:.3f})".format(self.probability)
+        return str(self) + " (prob.: {0:.4f})".format(self.probability)
 
     def __str__(self):
         return self.synset.name()
