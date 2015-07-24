@@ -25,8 +25,11 @@ class GoldTree:
 
         synsets = wn.synsets(self.word, lang='heb')
         self.synsets_number = len(synsets)
-        prob = 1 / self.synsets_number
+        if self.synsets_number == 0:
+            print("No real synset has been found")
+        else:
+            prob = 1 / self.synsets_number
 
-        for synset in synsets:
-            self.synset_dict[synset] = prob
-        return SynsetGraph(self.synset_dict)
+            for synset in synsets:
+                self.synset_dict[synset] = prob
+            return SynsetGraph(self.synset_dict)

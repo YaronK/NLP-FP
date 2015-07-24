@@ -13,6 +13,8 @@ def main():
     word = "חתול"
     synsets_number = "10"
 
+    # NIKUS HASER:
+    # http://www.snopi.com/programs/help.htm
     es = EnglishSynsets(word, synsets_number)
     all_synets = es.get_english_synsets()
 
