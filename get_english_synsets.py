@@ -10,7 +10,7 @@ import re
 from nltk.corpus import wordnet as wn
 from gensim.models import Word2Vec
 
-import change_letters
+from change_letters import GetLetters
 
 
 class EnglishSynsets:
@@ -27,7 +27,7 @@ class EnglishSynsets:
         for similar_word in similar_words:
             if self.synsets_number < 1:
                 break
-            heb_word = change_letters.GetLetters(similar_word[0])
+            heb_word = GetLetters(similar_word[0])
 
             # Get Synsets
             word_synsets = wn.synsets(heb_word, lang='heb')
@@ -48,7 +48,7 @@ class EnglishSynsets:
     def get_english_synsets(self):
         # Case input is in English
         if not re.search('[a-zA-Z]', self.word):
-            self.word = change_letters.GetLetters(self.word)
+            self.word = GetLetters(self.word)
 
         # Get n most similar words
         similar_words = self.word_2_vec()

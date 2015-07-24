@@ -2,6 +2,7 @@
 
 from get_english_synsets import EnglishSynsets
 from scorer import SynsetGraph
+from create_gold_tree import GoldTree
 
 
 def main():
@@ -15,22 +16,24 @@ def main():
     es = EnglishSynsets(word, synsets_number)
     all_synets = es.get_english_synsets()
 
-    graph = SynsetGraph(all_synets)
+    test_graph = SynsetGraph(all_synets)
+    gold_graph = GoldTree(word).get_gold_tree()
 
     print("")
     print("len(node.hypernym_nodes) > 1:")
-    for node in graph.synset_nodes.values():
+    for node in test_graph.synset_nodes.values():
         if len(node.hypernym_nodes) > 1:
             print(node)
 
     print("")
     print("len(node.hyponym_nodes) > 1:")
-    for node in graph.synset_nodes.values():
+    for node in test_graph.synset_nodes.values():
         if len(node.hyponym_nodes) > 1:
             print(node)
 
     print("")
-    graph.print_tree()
+    test_graph.print_tree()
+    gold_graph.print_tree()
 
 if __name__ == '__main__':
     main()
