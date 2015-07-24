@@ -12,8 +12,8 @@ class SynsetEdge(object):
         self.weight = 0
         self.probability = 0
 
-    def set_weight(self, weight):
-        self.weight = weight
+    def add_weight(self, weight):
+        self.weight += weight
         self.hypernym_node.add_weight(weight)
 
     def set_probability(self, probability):
@@ -43,7 +43,7 @@ class SynsetNode(object):
         if len(self.hypernym_edges) != 0:
             weight_per_hypernym = weight / float(len(self.hypernym_edges))
             for hypernym_edge in self.hypernym_edges.values():
-                hypernym_edge.set_weight(weight_per_hypernym)
+                hypernym_edge.add_weight(weight_per_hypernym)
 
     def add_probability(self, probability):
         self.probability += probability
@@ -63,7 +63,7 @@ class SynsetNode(object):
             hypernym_node.hyponym_edges[self.synset.name()] = edge
 
     def __repr__(self):
-        return str(self) + " (prob. {0:.3f})".format(self.probability)
+        return str(self) + " (prob.: {0:.3f})".format(self.probability)
 
     def __str__(self):
         return self.synset.name()
@@ -115,6 +115,6 @@ class SynsetGraph(object):
         self._print_node(self.get_entity_node(), 0)
 
     def _print_node(self, node, indentation):
-        print("   " * indentation + repr(node))
+        print("|   " * indentation + repr(node))
         for hyponym_edge in node.hyponym_edges.values():
             self._print_node(hyponym_edge.hyponym_node, indentation + 1)
