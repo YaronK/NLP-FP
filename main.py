@@ -12,7 +12,7 @@ def evaluate(test_graph, gold_graph):
     success = sum([node.total_probability() for node in test_nodes
                    if node in gold_nodes])
 
-    return (success, total)
+    return (success / total)
 
 
 def main():
@@ -20,8 +20,8 @@ def main():
     # word = input()
     # print("Enter number of wanted Synsets")
     # synsets_number = int(input())
-    word = "חתול"
-    number_of_synsets = 3
+    word = "מזגן"
+    number_of_synsets = 2
 
     # word2vec definitions
     vector_file_path = "vectors-g.bin"
@@ -36,14 +36,15 @@ def main():
     test_graph = SynsetGraph(word2vec_synsets)
 
     gold_synsets = WNUtils.get_gold_synsets(word)
-    if gold_synsets is None:
-        return None
-    gold_graph = SynsetGraph(gold_synsets)
+    if gold_synsets is not None:
+        gold_graph = SynsetGraph(gold_synsets)
+        result = evaluate(test_graph, gold_graph)
+        print("{0:.3f}".format(result))
+        print("")
+        gold_graph.print_tree()
 
-    success, total = evaluate(test_graph, gold_graph)
-    print("{0:.3f}".format(success / total))
-    # test_graph.print_tree()
-    # gold_graph.print_tree()
+    print("")
+    test_graph.print_tree()
 
     #test_graph.print_leaves()
     #gold_graph.print_leaves()
