@@ -1,22 +1,28 @@
 # -*- coding: utf-8 -*-
 
-from get_english_synsets import EnglishSynsets
 from synset_graph import SynsetGraph
 from create_gold_tree import GoldTree
+from wordnet_utilities import WordnetUtilities as WNUtils
 
 
 def main():
     print("Please write an Hebrew word")
     # word = input()
     print("Enter number of wanted Synsets")
-    # synsets_number = input()
+    # synsets_number = int(input())
     word = "חתול"
-    synsets_number = "10"
+    number_of_synsets = 10
 
-    es = EnglishSynsets(word, synsets_number)
-    all_synets = es.get_english_synsets()
+    # word2vec definitions
+    vector_file_path = "vectors-g.bin"
+    topn = 500
 
-    test_graph = SynsetGraph(all_synets)
+    word2vec_synsets = WNUtils.get_word2vec_similar_synsets(word,
+                                                            number_of_synsets,
+                                                            vector_file_path,
+                                                            topn)
+
+    test_graph = SynsetGraph(word2vec_synsets)
     gold_graph = GoldTree(word).get_gold_tree()
 
     print("")
