@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from synset_graph import SynsetGraph
-from create_gold_tree import GoldTree
 from wordnet_utilities import WordnetUtilities as WNUtils
 
 
@@ -21,9 +20,10 @@ def main():
                                                             number_of_synsets,
                                                             vector_file_path,
                                                             topn)
-
     test_graph = SynsetGraph(word2vec_synsets)
-    gold_graph = GoldTree(word).get_gold_tree()
+
+    gold_synsets = WNUtils.get_gold_synsets(word)
+    gold_graph = SynsetGraph(gold_synsets)
 
     print("")
     print("len(node.hypernym_nodes) > 1:")

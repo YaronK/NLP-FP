@@ -1,6 +1,5 @@
 eclipse.preferences.version=1
-encoding/corpora_utilities.py=utf-8
-encoding/create_gold_tree.py=utf-8
+encoding/corpora.py=utf-8
 encoding/main.py=utf-8
 encoding/synset_graph.py=utf-8
 encoding/utilities.py=utf-8

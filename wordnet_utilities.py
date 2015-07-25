@@ -32,3 +32,21 @@ class WordnetUtilities:
                 for synset in word_synsets:
                     all_synsets[synset] = similar_word[1]
         return all_synsets
+
+    @staticmethod
+    def get_gold_synsets(word):
+        # In case input is in English
+        if re.search('[a-zA-Z]', word):
+            word = ConvertHebrewEnglish(word)
+
+        synsets = wn.synsets(word,  # @UndefinedVariable
+                             lang='heb')
+        synsets_number = len(synsets)
+        if synsets_number == 0:
+            print("No real synset has been found")
+        else:
+            prob = 1 / float(synsets_number)
+            synset_dict = dict()
+            for synset in synsets:
+                synset_dict[synset] = prob
+            return synset_dict
