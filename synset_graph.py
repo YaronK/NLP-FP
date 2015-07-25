@@ -55,6 +55,16 @@ class SynsetNode(object):
     def __str__(self):
         return self.synset.name()
 
+    def __eq__(self, other):
+        return (isinstance(other, self.__class__)
+                and self.synset == other.synset)
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return self.synset.__hash__()
+
 
 class SynsetGraph(object):
     def __init__(self, synset_weight_dict):
@@ -99,6 +109,14 @@ class SynsetGraph(object):
         self._print_node(self.get_entity_node(), 0)
 
     def _print_node(self, node, indentation):
-        print("|   " * indentation + repr(node))
+        print("|   " * indentation + node.synset.name(), end="")
+        while(len(node.hyponym_nodes) == 1):
+            node = list(node.hyponym_nodes.keys())[0]
+            print(" > " + node.synset.name(), end="")
+        print("({0:.3f})".format(node.total_probability()))
         for hyponym_node in node.hyponym_nodes:
             self._print_node(hyponym_node, indentation + 1)
+
+    def print_leaves(self):
+        for leaf in self.leaf_nodes:
+            print(repr(leaf))
