@@ -3,9 +3,9 @@
 import re
 
 from nltk.corpus import wordnet as wn
-from gensim.models import Word2Vec
 
 from utilities import ConvertHebrewEnglish
+from word2vec_utilities import Word2VecUtilities
 
 
 class EnglishSynsets:
@@ -32,18 +32,15 @@ class EnglishSynsets:
                 for synset in word_synsets:
                     self.all_synsets[synset] = similar_word[1]
 
-    def word_2_vec(self):
-        print("Starting Word2Vec Learning...")
-        model = Word2Vec.load_word2vec_format(self.vectors_path, binary=True)
-        return model.most_similar(self.word, topn=self.top_n)
-
     def get_english_synsets(self):
         # Case input is in English
         if not re.search('[a-zA-Z]', self.word):
             self.word = ConvertHebrewEnglish(self.word)
 
         # Get n most similar words
-        similar_words = self.word_2_vec()
+        w2cUtils = Word2VecUtilities()
+        w2cUtils.load_vectors_from(self.vectors_path)
+        similar_words = w2cUtils.most_similar_to(self.word, self.top_n)
 
         # Get and return all Synsets
         self.get_synsets(similar_words)
