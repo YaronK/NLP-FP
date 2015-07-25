@@ -3,5 +3,5 @@ encoding/corpora.py=utf-8
 encoding/main.py=utf-8
 encoding/synset_graph.py=utf-8
 encoding/utilities.py=utf-8
-encoding/word2vec_utilities.py=utf-8
-encoding/wordnet_utilities.py=utf-8
+encoding/word2vec.py=utf-8
+encoding/wordnet.py=utf-8

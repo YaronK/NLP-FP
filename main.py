@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from synset_graph import SynsetGraph
-from wordnet_utilities import WordnetUtilities as WNUtils
+from wordnet import WordnetUtilities as WNUtils
 
 
 def main():
