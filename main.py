@@ -20,8 +20,8 @@ def main():
     # word = input()
     # print("Enter number of wanted Synsets")
     # synsets_number = int(input())
-    word = "מזגן"
-    number_of_synsets = 2
+    word = "כלב"
+    number_of_synsets = 3
 
     # word2vec definitions
     vector_file_path = "vectors-g.bin"
@@ -46,8 +46,8 @@ def main():
     print("")
     test_graph.print_tree()
 
-    #test_graph.print_leaves()
-    #gold_graph.print_leaves()
+    # test_graph.print_leaves()
+    # gold_graph.print_leaves()
 
 if __name__ == '__main__':
     main()

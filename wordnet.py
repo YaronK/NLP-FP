@@ -2,6 +2,8 @@
 import re
 from conversion import ConvertHebrewEnglish
 from word2vec import Word2VecUtilities
+from translation import Translator
+
 from nltk.corpus import wordnet as wn
 
 
@@ -32,6 +34,16 @@ class WordnetUtilities:
                 number_of_synsets -= 1
                 for synset in word_synsets:
                     all_synsets[synset] = similar_word[1]
+            # Case Hebrew word not appear in Wordnet
+            else:
+                ts = Translator()
+                eng_word = ts.translate(heb_word)
+                word_synsets = wn.synsets(eng_word)  # @UndefinedVariable
+                if len(word_synsets) > 0:
+                    number_of_synsets -= 1
+                    for synset in word_synsets:
+                        all_synsets[synset] = similar_word[1]
+
         return all_synsets
 
     @staticmethod
@@ -43,12 +55,18 @@ class WordnetUtilities:
         synsets = wn.synsets(word,  # @UndefinedVariable
                              lang='heb')
         synsets_number = len(synsets)
+        # Case word does not appear in Hebrew Wordnet
         if synsets_number == 0:
-            print("No real synset has been found")
-            return None
-        else:
-            prob = 1 / float(synsets_number)
-            synset_dict = dict()
-            for synset in synsets:
-                synset_dict[synset] = prob
-            return synset_dict
+            ts = Translator()
+            eng_word = ts.translate(word)
+            synsets = wn.synsets(eng_word)  # @UndefinedVariable
+            synsets_number = len(synsets)
+            if synsets_number == 0:
+                print("No real Synset has been found")
+                return None
+
+        prob = 1 / float(synsets_number)
+        synset_dict = dict()
+        for synset in synsets:
+            synset_dict[synset] = prob
+        return synset_dict
