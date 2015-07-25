@@ -2,5 +2,6 @@ eclipse.preferences.version=1
 encoding/corpora.py=utf-8
 encoding/main.py=utf-8
 encoding/synset_graph.py=utf-8
+encoding/translation.py=utf-8
 encoding/word2vec.py=utf-8
 encoding/wordnet.py=utf-8
