@@ -1,19 +1,13 @@
 # -*- coding: utf-8 -*-
-'''
-Created on 7 ביול 2015
-
-@author: Gilad
-'''
 import re
 
 
-def _replace_all(text, dic):
-    for i, j in dic.items():
-        text = text.replace(i, j)
-    return text
+def ConvertHebrewEnglish(word):
+    def _replace_all(text, dic):
+        for i, j in dic.items():
+            text = text.replace(i, j)
+        return text
 
-
-def GetLetters(word):
     eng_heb_dict = {"a": "א", "b": "ב", "g": "ג", "d": "ד",
                     "h": "ה", "w": "ו", "z": "ז", "x": "ח",
                     "v": "ט", "i": "י", "k": "כ", "l": "ל",

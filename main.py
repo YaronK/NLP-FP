@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from get_english_synsets import EnglishSynsets
-from scorer import SynsetGraph
+from synset_graph import SynsetGraph
 from create_gold_tree import GoldTree
 
 
@@ -13,8 +13,6 @@ def main():
     word = "חתול"
     synsets_number = "10"
 
-    # NIKUS HASER:
-    # http://www.snopi.com/programs/help.htm
     es = EnglishSynsets(word, synsets_number)
     all_synets = es.get_english_synsets()
 

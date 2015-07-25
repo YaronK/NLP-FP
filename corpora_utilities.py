@@ -1,9 +1,5 @@
 # coding: utf-8
-'''
-Created on 27 ���� 2015
 
-@author: Gilad
-'''
 import xml.etree.ElementTree as ET
 import sys
 import re
@@ -44,7 +40,6 @@ def parse_from_folders(path):
     # Loop all folders of corpus
     while dir_counter < 44:
         dir_ = path + '\\' + str(dir_counter)
-        print dir_counter
         dir_counter += 1
 
         # Build 1 parsed text file from the entire director

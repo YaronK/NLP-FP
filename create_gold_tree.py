@@ -1,15 +1,10 @@
 # -*- coding: utf-8 -*-
-'''
-Created on 7 ביול 2015
-
-@author: Gilad
-'''
 import re
 
 from nltk.corpus import wordnet as wn
 
-from scorer import SynsetGraph
-from change_letters import GetLetters
+from synset_graph import SynsetGraph
+from utilities import ConvertHebrewEnglish
 
 
 class GoldTree:
@@ -21,9 +16,10 @@ class GoldTree:
     def get_gold_tree(self):
         # Case input is in English
         if re.search('[a-zA-Z]', self.word):
-            self.word = GetLetters(self.word)
+            self.word = ConvertHebrewEnglish(self.word)
 
-        synsets = wn.synsets(self.word, lang='heb')
+        synsets = wn.synsets(self.word,  # @UndefinedVariable
+                             lang='heb')
         self.synsets_number = len(synsets)
         if self.synsets_number == 0:
             print("No real synset has been found")
