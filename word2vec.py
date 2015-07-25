@@ -10,4 +10,9 @@ class Word2VecUtilities:
                                                            binary=binary)
 
     def most_similar_to(self, to, topn):
-        return self.weight_matrix.most_similar(to, topn=topn)
+        try:
+            most_similar = self.weight_matrix.most_similar(to, topn=topn)
+        except Exception:
+            print("Word doesn't exists in vocabulary")
+            most_similar = None
+        return most_similar

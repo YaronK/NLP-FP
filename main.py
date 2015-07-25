@@ -31,9 +31,13 @@ def main():
                                                             number_of_synsets,
                                                             vector_file_path,
                                                             topn)
+    if word2vec_synsets is None:
+        return None
     test_graph = SynsetGraph(word2vec_synsets)
 
     gold_synsets = WNUtils.get_gold_synsets(word)
+    if gold_synsets is None:
+        return None
     gold_graph = SynsetGraph(gold_synsets)
 
     success, total = evaluate(test_graph, gold_graph)

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
-from utilities import ConvertHebrewEnglish
+from conversion import ConvertHebrewEnglish
 from word2vec import Word2VecUtilities
 from nltk.corpus import wordnet as wn
 
@@ -16,7 +16,8 @@ class WordnetUtilities:
         w2cUtils = Word2VecUtilities()
         w2cUtils.load_vectors_from(vector_file_path)
         similar_words = w2cUtils.most_similar_to(word, topn=topn)
-
+        if similar_words is None:
+            return None
         all_synsets = dict()
         for similar_word in similar_words:
             if number_of_synsets < 1:
@@ -44,6 +45,7 @@ class WordnetUtilities:
         synsets_number = len(synsets)
         if synsets_number == 0:
             print("No real synset has been found")
+            return None
         else:
             prob = 1 / float(synsets_number)
             synset_dict = dict()
