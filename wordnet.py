@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
-from utilities import ConvertHebrewEnglish
+from conversion import ConvertHebrewEnglish
 from word2vec import Word2VecUtilities
 from nltk.corpus import wordnet as wn
 
