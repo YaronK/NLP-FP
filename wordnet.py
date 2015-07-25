@@ -45,7 +45,7 @@ class WordnetUtilities:
         synsets_number = len(synsets)
         if synsets_number == 0:
             print("No real synset has been found")
-            return False
+            return None
         else:
             prob = 1 / float(synsets_number)
             synset_dict = dict()

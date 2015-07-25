@@ -9,7 +9,7 @@ def main():
     # word = input()
     print("Enter number of wanted Synsets")
     # synsets_number = int(input())
-    word = "כלב"
+    word = "חתול"
     number_of_synsets = 20
 
     # word2vec definitions
@@ -25,7 +25,7 @@ def main():
     test_graph = SynsetGraph(word2vec_synsets)
 
     gold_synsets = WNUtils.get_gold_synsets(word)
-    if not gold_synsets:
+    if gold_synsets is None:
         return None
     gold_graph = SynsetGraph(gold_synsets)
 
