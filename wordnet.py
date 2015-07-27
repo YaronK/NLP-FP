@@ -31,18 +31,22 @@ class WordnetUtilities:
 
             # Add known synsets to the sets
             if len(word_synsets) > 0:
-                number_of_synsets -= 1
                 for synset in word_synsets:
+                    number_of_synsets -= 1
                     all_synsets[synset] = similar_word[1]
+                    if number_of_synsets < 1:
+                        break
             # Case Hebrew word not appear in Wordnet
             else:
                 ts = Translator()
                 eng_word = ts.translate(heb_word)
                 word_synsets = wn.synsets(eng_word)  # @UndefinedVariable
                 if len(word_synsets) > 0:
-                    number_of_synsets -= 1
                     for synset in word_synsets:
+                        number_of_synsets -= 1
                         all_synsets[synset] = similar_word[1]
+                        if number_of_synsets < 1:
+                            break
 
         return all_synsets
 
