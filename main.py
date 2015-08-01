@@ -8,15 +8,24 @@ def evaluate(test_graph, gold_graph):
     gold_nodes = gold_graph.synset_nodes.values()
     test_nodes = test_graph.synset_nodes.values()
 
-    total = sum([node.total_probability() for node in gold_nodes])
-    test_correct = sum([node.total_probability() for node in test_nodes
-                        if node in gold_nodes])
+    total_gold = len(gold_nodes)
+    total_test = len(test_nodes)
 
-    test_wrong = sum([node.total_probability() for node in test_nodes
-                      if node not in gold_nodes])
+    total_nodes = total_gold + total_test
 
-    success = test_correct - test_wrong
-    return (success / total)
+    test_correct = sum([1 for node in test_nodes
+                       if node in gold_nodes])
+
+    gold_correct = sum([1 for node in gold_nodes
+                       if node in test_nodes])
+
+    return ((test_correct + gold_correct) / total_nodes)
+
+    # test_correct = sum([node.total_probability() for node in test_nodes
+    #                     if node in gold_nodes])
+
+    # test_wrong = sum([node.total_probability() for node in test_nodes
+    #                   if node not in gold_nodes])
 
 
 def main():

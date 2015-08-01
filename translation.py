@@ -11,6 +11,10 @@ class Translator:
     def translate(self, word):
         self.url = ("https://translate.yandex.net/api/v1.5/tr/translate?" +
                     "key={0}&lang=he-en&text={1}".format(self.key, word))
-        response = requests.get(self.url)
+        try:
+            response = requests.get(self.url)
+        except Exception:
+            print("No internet connection found")
+            return ""
         tree = ET.fromstring(response.text)
         return tree.find("text").text
