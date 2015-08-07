@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from word2vec import Word2VecUtilities
-from conversion import ConvertHebrewEnglish
+from conversion import HebrewString
 
 
 def _remove_puncutation(word):
@@ -9,7 +9,6 @@ def _remove_puncutation(word):
         o = ord(letter)
         if o in range(1488, 1515) or o == 32 or o == 45:
             new_word += letter
-
     return new_word
 
 
@@ -21,8 +20,10 @@ def _get_removal_apporval(word, word_2_vec, i, letter):
     if i != len(word) and word[i - 1] != letter and word[i+1] != letter:
         new_word = add_letter(word, letter, i)
         new_word = _remove_puncutation(new_word)
-        eng_word = ConvertHebrewEnglish(new_word)
-        return word_2_vec.most_similar_to(eng_word, 1) is not None
+        eng_letters = HebrewString(new_word)
+        retriever = word_2_vec.build_retriever(eng_letters.eng_ltrs())
+
+        return retriever.get(1) is not None
 
 
 def check_punctuation(word, word_2_vec):
@@ -51,7 +52,7 @@ def main():
     word_2_vec = Word2VecUtilities()
     word_2_vec.load_vectors_from("vectors-g.bin")
 
-    f = open(r"wn-data-heb - Nikud.tab", 'r',  encoding="utf8")
+    f = open(r"wn-data-heb-Original.tab", 'r',  encoding="utf8")
     text = ""
 
     for line in f:
@@ -60,9 +61,10 @@ def main():
             for word in words[2:len(words)]:
                 new_word = check_punctuation(word, word_2_vec)
                 line = line.replace(word, new_word)
+                line = line.replace(r"\r\n", r"\n")
         text += line
 
-    f = open(r"wn-data-heb - Bli Nikud.tab", 'w',  encoding="utf8")
+    f = open(r"wn-data-heb-BliNikud.tab", 'w',  encoding="utf8")
     f.write(text)
 
 
