@@ -1,0 +1,12 @@
+Things to write in the document:
+
+1.How did we find Hebrew corpora?
+2.How did we find English corpora?
+3.Which word2vec software did we use? (Mention C, vectors-g.bin and the use of nltk in python)
+4. Which Wordnet software did we use?
+5. Which Hebrew wordnet did we use?
+6. How did we get rid of the Hebrew punctation?
+7. How did we handled WORD2VEC corpora in english letters, and word2net in hebrew letters?
+8. How did we chose to evaluate? (NEED to eloabrate that question)
+9. Translation - Elobarate
+10. 
