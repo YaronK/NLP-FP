@@ -10,7 +10,7 @@ def main():
     # word = input("Enter a Hebrew word:")
     # synsets_number = int(input("Enter the number of synsets:"))
 
-    word = "כלב"
+    word = "חתול"
     number_of_synsets = 3
 
     # word2vec definitions
@@ -24,21 +24,24 @@ def main():
                                                             w2vUtilities,
                                                             topn)
     if word2vec_synsets is None:
+        print ("No word2vec similar synsets were found for {}\n".format(word))
         return
 
     test_graph = SynsetGraph(word2vec_synsets)
+    test_graph.print_tree()
+    print ("")
 
     gold_synsets = WNUtils.get_gold_synsets(word)
-    if gold_synsets is not None:
-        gold_graph = SynsetGraph(gold_synsets)
-        result = Evaluation.evaluate(test_graph, gold_graph)
-        print("Evaluate: {0:.3f}".format(result))
-        print("")
-        gold_graph.print_tree()
+    if gold_synsets is None:
+        print ("No wordnet synsets were found for {}\n".format(word))
+        return
 
-    print("")
-    test_graph.print_tree()
+    gold_graph = SynsetGraph(gold_synsets)
+    gold_graph.print_tree()
+    print ("")
 
+    result = Evaluation.evaluate(test_graph, gold_graph, True)
+    print("Evaluate: {0:.3f}".format(result))
 
 if __name__ == '__main__':
     main()

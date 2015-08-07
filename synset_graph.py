@@ -40,6 +40,9 @@ class SynsetNode(object):
                                     self.total_weight()) * probability)
             hyponym_node.add_probability(hyponym_probability, self)
 
+    def get_synset(self):
+        return self.synset
+
     def total_weight(self):
         #  Should be called only after weights have been calculated
         if not hasattr(self, "_total_weight"):
@@ -90,6 +93,9 @@ class SynsetGraph(object):
                    for synset in hypernym_path}
         self.synset_to_synset_node_dictionary = {synset: SynsetNode(synset)
                                                  for synset in synsets}
+        self.leaf_synsets = leaf_synsets
+        self.leaf_synset_nodes = {self.get_synset_node(s)
+                                  for s in self.leaf_synsets}
 
     def _init_edges(self, leaf_synsets):
         for leaf in leaf_synsets:
@@ -110,6 +116,19 @@ class SynsetGraph(object):
     def _calculate_probabilities(self):
         self.get_entity_node().add_probability(1)
 
+    def get_entity_node(self):
+        entity_synset = [synset
+                         for synset in self.get_synsets()
+                         if synset.name() == "entity.n.01"][0]
+        # TODO: find the root in a better way
+        return self.get_synset_node(entity_synset)
+
+    def get_leaf_synsets(self):
+        return self.leaf_synsets
+
+    def get_leaf_synset_nodes(self):
+        return self.leaf_synset_nodes
+
     def get_synsets(self):
         return self.synset_to_synset_node_dictionary.keys()
 
@@ -118,13 +137,6 @@ class SynsetGraph(object):
 
     def get_synset_nodes(self):
         return self.synset_to_synset_node_dictionary.values()
-
-    def get_entity_node(self):
-        entity_synset = [synset
-                         for synset in self.get_synsets()
-                         if synset.name() == "entity.n.01"][0]
-        # TODO: find the root in a better way
-        return self.get_synset_node(entity_synset)
 
     def print_tree(self):
         self._print_node(self.get_entity_node(), 0)
