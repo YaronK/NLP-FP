@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-import re
 
 
-def ConvertHebrewEnglish(word):
-    def _replace_all(text, dic):
-        for i, j in dic.items():
-            text = text.replace(i, j)
-        return text
+class HebrewString(str):
+    heb_eng_dict = {"א": "a", "ב": "b", "ג": "g", "ד": "d",
+                    "ה": "h", "ו": "w", "ז": "z", "ח": "x",
+                    "ט": "v", "י": "i", "כ": "k", "ל": "l",
+                    "מ": "m", "נ": "n", "ס": "s", "ע": "y",
+                    "פ": "p", "צ": "c", "ק": "q", "ר": "r",
+                    "ש": "e", "ת": "t", "ם": "m", "ן": "n",
+                    "ץ": "c", "ך": "k", "ף": "p"}
 
     eng_heb_dict = {"a": "א", "b": "ב", "g": "ג", "d": "ד",
                     "h": "ה", "w": "ו", "z": "ז", "x": "ח",
@@ -22,20 +24,23 @@ def ConvertHebrewEnglish(word):
                         "t": "ת", "m": "ם", "n": "ן", "c": "ץ",
                         "k": "ך", "p": "ף"}
 
-    heb_eng_dict = {"א": "a", "ב": "b", "ג": "g", "ד": "d",
-                    "ה": "h", "ו": "w", "ז": "z", "ח": "x",
-                    "ט": "v", "י": "i", "כ": "k", "ל": "l",
-                    "מ": "m", "נ": "n", "ס": "s", "ע": "y",
-                    "פ": "p", "צ": "c", "ק": "q", "ר": "r",
-                    "ש": "e", "ת": "t", "ם": "m", "ן": "n",
-                    "ץ": "c", "ך": "k", "ף": "p"}
+    def eng_ltrs(self):
+        if not hasattr(self, "_english_letters"):
+            _english_letters = \
+                HebrewString._replace_all(self, HebrewString.heb_eng_dict)
+        return _english_letters
 
-    if re.search('[a-zA-Z]', word):
-        # Handle final letter in Hebrew
-        word_start = _replace_all(word[:-1], eng_heb_dict)
-        word_final = _replace_all(word[len(word) - 1], eng_heb_dict_fin)
-        word = word_start + word_final
-    else:
-        # Translate Hebrew to Jibrish
-        word = _replace_all(word, heb_eng_dict)
-    return word
+    def heb_ltrs(self):
+        if not hasattr(self, "_english_letters"):
+            start = HebrewString._replace_all(self[:-1],
+                                              HebrewString.eng_heb_dict)
+            end = HebrewString._replace_all(self[-1],
+                                            HebrewString.eng_heb_dict_fin)
+            _hebrew_letters = start + end
+        return _hebrew_letters
+
+    @staticmethod
+    def _replace_all(word, dic):
+        for i, j in dic.items():
+            word = word.replace(i, j)
+        return word
