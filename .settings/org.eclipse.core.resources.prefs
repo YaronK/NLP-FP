@@ -1,5 +1,7 @@
 eclipse.preferences.version=1
+encoding/conversion.py=utf-8
 encoding/corpora.py=utf-8
+encoding/evaluation.py=utf-8
 encoding/main.py=utf-8
 encoding/synset_graph.py=utf-8
 encoding/translation.py=utf-8

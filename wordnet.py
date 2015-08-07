@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
 from conversion import ConvertHebrewEnglish
-from word2vec import Word2VecUtilities
 from translation import Translator
 
 from nltk.corpus import wordnet as wn
@@ -9,20 +8,19 @@ from nltk.corpus import wordnet as wn
 
 class WordnetUtilities:
     @staticmethod
-    def get_word2vec_similar_synsets(word, number_of_synsets,
-                                     vector_file_path, topn):
+    def get_word2vec_similar_synsets(word, number_of_similar_synsets,
+                                     word_to_vec_utilities, topn):
         # In case input is in English
         if not re.search('[a-zA-Z]', word):
             word = ConvertHebrewEnglish(word)
 
-        w2cUtils = Word2VecUtilities()
-        w2cUtils.load_vectors_from(vector_file_path)
-        similar_words = w2cUtils.most_similar_to(word, topn=topn)
+        similar_words = word_to_vec_utilities.most_similar_to(word, topn=topn)
         if similar_words is None:
             return None
+
         all_synsets = dict()
         for similar_word in similar_words:
-            if number_of_synsets < 1:
+            if number_of_similar_synsets < 1:
                 break
             heb_word = ConvertHebrewEnglish(similar_word[0])
 
@@ -32,9 +30,9 @@ class WordnetUtilities:
             # Add known synsets to the sets
             if len(word_synsets) > 0:
                 for synset in word_synsets:
-                    number_of_synsets -= 1
+                    number_of_similar_synsets -= 1
                     all_synsets[synset] = similar_word[1]
-                    if number_of_synsets < 1:
+                    if number_of_similar_synsets < 1:
                         break
             # Case Hebrew word not appear in Wordnet
             else:
@@ -43,9 +41,9 @@ class WordnetUtilities:
                 word_synsets = wn.synsets(eng_word)  # @UndefinedVariable
                 if len(word_synsets) > 0:
                     for synset in word_synsets:
-                        number_of_synsets -= 1
+                        number_of_similar_synsets -= 1
                         all_synsets[synset] = similar_word[1]
-                        if number_of_synsets < 1:
+                        if number_of_similar_synsets < 1:
                             break
 
         return all_synsets

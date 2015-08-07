@@ -4,8 +4,8 @@
 class SynsetNode(object):
     def __init__(self, synset):
         super(SynsetNode, self).__init__()
-        self.synset = synset
 
+        self.synset = synset
         self.hypernym_nodes = dict()  # hypernym_node : probability
         self.hyponym_nodes = dict()  # hyponym_node : weight
 
@@ -18,13 +18,14 @@ class SynsetNode(object):
             self.hyponym_nodes[hyponym_node] = 0
 
     def add_weight(self, weight, from_hyponym=None):
-        if from_hyponym is None:
+        if from_hyponym is None:  # i.e. leaf
             self._total_weight = weight
         else:
             self.hyponym_nodes[from_hyponym] += weight
 
-        weight_per_hypernym = (0 if (len(self.hypernym_nodes) == 0) else
-                               weight / float(len(self.hypernym_nodes)))
+        number_of_hypernym_nodes = len(self.hypernym_nodes)
+        weight_per_hypernym = (0 if (number_of_hypernym_nodes == 0) else
+                               weight / float(number_of_hypernym_nodes))
         for hypernym_node in self.hypernym_nodes:
             hypernym_node.add_weight(weight_per_hypernym, self)
 
@@ -40,11 +41,13 @@ class SynsetNode(object):
             hyponym_node.add_probability(hyponym_probability, self)
 
     def total_weight(self):
+        #  Should be called only after weights have been calculated
         if not hasattr(self, "_total_weight"):
             self._total_weight = sum(self.hyponym_nodes.values())
         return self._total_weight
 
     def total_probability(self):
+        #  Should be called only after probabilities have been calculated
         if not hasattr(self, "_total_probability"):
             self._total_probability = sum(self.hypernym_nodes.values())
         return self._total_probability
@@ -67,43 +70,61 @@ class SynsetNode(object):
 
 
 class SynsetGraph(object):
-    def __init__(self, synset_weight_dict):
+    def __init__(self, synset_weights_dictionary):
         super(SynsetGraph, self).__init__()
 
-        leaf_synsets = set(synset_weight_dict.keys())
+        leaf_synsets = set(synset_weights_dictionary.keys())
 
+        self._init_nodes(leaf_synsets)
+        self._init_edges(leaf_synsets)
+
+        self._calculate_weights(leaf_synsets, synset_weights_dictionary)
+        self._calculate_probabilities()
+
+    def _init_nodes(self, leaf_synsets):
         hypernym_paths = [hypernym_path
                           for synset in leaf_synsets
                           for hypernym_path in synset.hypernym_paths()]
+        synsets = {synset
+                   for hypernym_path in hypernym_paths
+                   for synset in hypernym_path}
+        self.synset_to_synset_node_dictionary = {synset: SynsetNode(synset)
+                                                 for synset in synsets}
 
-        self.synsets = synsets = {synset
-                                  for hypernym_path in hypernym_paths
-                                  for synset in hypernym_path}
-        self.synset_nodes = synset_nodes = {synset: SynsetNode(synset)
-                                            for synset in synsets}
-        self.leaf_nodes = {synset_nodes[synset] for synset in leaf_synsets}
-
+    def _init_edges(self, leaf_synsets):
         for leaf in leaf_synsets:
             for hypernym_path in leaf.hypernym_paths():
                 for i in range(1, len(hypernym_path)):
 
-                    hyponym_node = synset_nodes[hypernym_path[i]]
-                    hypernym_node = synset_nodes[hypernym_path[i - 1]]
+                    hyponym_node = self.get_synset_node(hypernym_path[i])
+                    hypernym_node = self.get_synset_node(hypernym_path[i - 1])
 
                     hyponym_node.add_hypernym(hypernym_node)
                     hypernym_node.add_hyponym(hyponym_node)
 
+    def _calculate_weights(self, leaf_synsets, synset_weights_dictionary):
         for leaf in leaf_synsets:
-            leaf_node = synset_nodes[leaf]
-            leaf_node.add_weight(synset_weight_dict[leaf])
+            leaf_node = self.get_synset_node(leaf)
+            leaf_node.add_weight(synset_weights_dictionary[leaf])
 
+    def _calculate_probabilities(self):
         self.get_entity_node().add_probability(1)
+
+    def get_synsets(self):
+        return self.synset_to_synset_node_dictionary.keys()
+
+    def get_synset_node(self, synset):
+        return self.synset_to_synset_node_dictionary[synset]
+
+    def get_synset_nodes(self):
+        return self.synset_to_synset_node_dictionary.values()
 
     def get_entity_node(self):
         entity_synset = [synset
-                         for synset in self.synsets
+                         for synset in self.get_synsets()
                          if synset.name() == "entity.n.01"][0]
-        return self.synset_nodes[entity_synset]
+        # TODO: find the root in a better way
+        return self.get_synset_node(entity_synset)
 
     def print_tree(self):
         self._print_node(self.get_entity_node(), 0)
@@ -116,7 +137,3 @@ class SynsetGraph(object):
         print("({0:.3f})".format(node.total_probability()))
         for hyponym_node in node.hyponym_nodes:
             self._print_node(hyponym_node, indentation + 1)
-
-    def print_leaves(self):
-        for leaf in self.leaf_nodes:
-            print(repr(leaf))

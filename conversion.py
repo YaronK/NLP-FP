@@ -36,6 +36,6 @@ def ConvertHebrewEnglish(word):
         word_final = _replace_all(word[len(word) - 1], eng_heb_dict_fin)
         word = word_start + word_final
     else:
-        # Translate from Hebrew to "Jibrish"
+        # Translate Hebrew to Jibrish
         word = _replace_all(word, heb_eng_dict)
     return word
