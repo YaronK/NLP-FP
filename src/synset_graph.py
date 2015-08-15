@@ -90,13 +90,17 @@ class SynsetGraph(object):
     def get_synset_weights_dictionary(self):
         return self.synset_weights_dictionary
 
+    def dump_to_file(self, path):
+        with open("../exps/" + path, 'w') as file:
+            file.write(self.display())
+
     def display(self):
         return ("{0}:".format(self.name) + "\n" +
                 self._display_node(self.get_entity_node(), 0))
 
     def _display_node(self, node, indentation):
-        temp = "" if node.synset is None else ("|   " * indentation +
-                                               node.synset.name())
+        temp = "Root" if node.synset is None else ("|   " * indentation +
+                                                   node.synset.name())
         while(len(node.hyponym_nodes) == 1):
             node = list(node.hyponym_nodes.keys())[0]
             temp += " > " + node.synset.name()

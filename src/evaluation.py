@@ -45,18 +45,22 @@ class SynsetGraphComarison():
 
         self.results[(decoded_graph, gold_graph, thinning_method)] = result
 
-        print ("Compared: {0} <-> {1}. Thinning: {2}. Result: {3:.3f}".
+        print ("{0} <-> {1}. Thinning: {2}. Result: {3:.3f}".
                format(str(decoded_graph), str(gold_graph),
                       thinning_method.__name__, result))
         return result
 
-    def dump_to_file(self, file_name):
-        line_format = "Compared: {0} <-> {1}. Thinning: {2}. Result: {3:.3f}\n"
-        with open("../results/" + file_name, 'w') as file:
-            for (decoded_graph, gold_graph, thinning_method) in self.results:
-                result = self.results[(decoded_graph, gold_graph,
-                                       thinning_method)]
-                file.write(line_format.format(str(decoded_graph),
+    def dump_to_file(self, path):
+        line_format = "{0} <-> {1}. Thinning: {2}. Result: {3:.3f}\n"
+
+        results = []
+        for (decoded_graph, gold_graph, thinning_method) in self.results:
+            result = self.results[(decoded_graph, gold_graph, thinning_method)]
+            results.append(line_format.format(str(decoded_graph),
                                               str(gold_graph),
                                               thinning_method.__name__,
                                               result))
+        results = sorted(results)
+        with open("../results/" + path, 'w') as file:
+            for result in results:
+                file.write(result)

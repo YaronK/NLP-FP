@@ -4,7 +4,7 @@ from src.evaluation import SynsetGraphComarison
 from src.synset_graph_extension import SynsetGraphExtension as SGE
 from src.wordnet import WordnetUtilities
 from src.word2vec import Word2VecUtilities
-from src.preprocessing.choose_random_words import main as cs
+from src.preprocessing.choose_random_words import choose_random_words
 
 
 def main():
@@ -13,8 +13,8 @@ def main():
     # decode_baseline = (input("Use Baseline? (True/False:")
     # thinning_method = (input("Use thinning Method? (True/None:")
 
-    # chosen_words = cs()
-    chosen_words = ["חתול", "כלב"]
+    # chosen_words = choose_random_words(10, "../data/wn-data-heb-BliNikud.tab")
+    chosen_words = ["אוביקט"]
     number_of_synsets = 20
     vector_file_path = "../data/vectors-g.bin"
 
@@ -23,17 +23,20 @@ def main():
     wnUtilities = WordnetUtilities(w2vUtilities)
 
     for word in chosen_words:
-        test_graph = SGE.build_word2vec_graph(word, number_of_synsets,
-                                              wnUtilities)
-        # print (test_graph.display())
+        print(word)
+        decoded_graph = SGE.build_word2vec_graph(word, number_of_synsets,
+                                                 wnUtilities)
+
+        decoded_graph.dump_to_file("{}-{}-{}.txt".format(word, "decoded",
+                                                         number_of_synsets))
 
         baseline_graph = SGE.build_baseline_graph()
-        # print (baseline_graph.display())
+        baseline_graph.dump_to_file("{}-{}.txt".format(word, "baseline"))
 
         gold_graph = SGE.build_gold_graph(word, wnUtilities)
-        # print (gold_graph.display())
+        baseline_graph.dump_to_file("{}-{}.txt".format(word, "gold"))
 
-        comparison = SynsetGraphComarison(baseline_graph, test_graph,
+        comparison = SynsetGraphComarison(baseline_graph, decoded_graph,
                                           gold_graph)
         comparison.compare_using_all_methods()
         comparison.dump_to_file("{}-{}.txt".format(word, number_of_synsets))

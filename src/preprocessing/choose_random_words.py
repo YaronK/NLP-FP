@@ -10,10 +10,8 @@ Output: x random words
 import random
 
 
-def main():
-    number_of_words = 200
-    heb_wn = open(r"../../data/wn-data-heb-BliNikud.tab", 'r',
-                  encoding="utf8")
+def choose_random_words(number_of_words, wn_path):
+    heb_wn = open(wn_path, 'r', encoding="utf8")
     chosen_words = list()
 
     for line in heb_wn:
@@ -35,4 +33,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    choose_random_words()
