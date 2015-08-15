@@ -30,6 +30,7 @@ def main():
 
     heb_wn.close()
 
+    return chosen_words
     # print(chosen_words)
 
 
