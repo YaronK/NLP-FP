@@ -14,7 +14,6 @@ class SynsetGraph(object):
         self._init_nodes(leaf_synsets)
         self._init_edges(leaf_synsets)
         self.root_node = self._find_root_node()
-        print(self.display())
 
         self._calculate_weights(leaf_synsets, synset_weights_dictionary)
         self._calculate_probabilities()
@@ -53,20 +52,20 @@ class SynsetGraph(object):
 
     def _find_root_node(self):
         synsets = list(self.get_synsets())
-        roots = dict()
+        roots = set()
         for synset in synsets:
-            paths = synset.hypernym_paths()
-            root = paths[0]
+            root = synset.hypernym_paths()[0]
             while type(root) is list:
                 root = root[0]
-            roots[root.name()] = True
+            roots.add(self.get_synset_node(root))
 
         return self._add_global_root(roots)
 
     def _add_global_root(self, roots):
-        global_root = SynsetNode('root')
+        global_root = SynsetNode(None)
         for root in roots:
             global_root.add_hyponym(root)
+            root.add_hypernym(global_root)
 
         return global_root
 
@@ -96,7 +95,8 @@ class SynsetGraph(object):
                 self._display_node(self.get_entity_node(), 0))
 
     def _display_node(self, node, indentation):
-        temp = "|   " * indentation + node.synset.name()
+        temp = "" if node.synset is None else ("|   " * indentation +
+                                               node.synset.name())
         while(len(node.hyponym_nodes) == 1):
             node = list(node.hyponym_nodes.keys())[0]
             temp += " > " + node.synset.name()
