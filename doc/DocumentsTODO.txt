@@ -1,12 +1,51 @@
-Things to write in the document:
+Document should be in that format: http://www.acl2013.org/site/call.html
 
-1.How did we find Hebrew corpora?
-2.How did we find English corpora?
-3.Which word2vec software did we use? (Mention C, vectors-g.bin and the use of nltk in python)
-4. Which Wordnet software did we use?
-5. Which Hebrew wordnet did we use?
-6. How did we get rid of the Hebrew punctation?
-7. How did we handled WORD2VEC corpora in english letters, and word2net in hebrew letters?
-8. How did we chose to evaluate? (NEED to eloabrate that question)
-9. Translation - Elobarate
-10. 
+Sections:
+1.Abstract
+
+2.Introduction
+
+3.PreProccessing - Corpora
+	3.1. How did we find Hebew Corpora (+copora script)
+
+4. Word2Vec
+	4.1. C code - Where from.. etc
+	4.2. Vectors-g.bin (Data folder)
+	4.3. Python nltk
+
+5. Wordnet
+	5.1. Hebrew OMW (Technion Haifa)
+	5.2. nikud script (Hebrew punctuation)
+	5.3. using nltk Wordnet
+	5.4. English wordnet
+
+6. Combining Wordnet and Word2Vec
+	6.1. Converting from Hebrew and English Letters
+
+7. Translation
+	7.1. Open API
+	7.2. When did we choose to translate
+	7.3. Check if the word is similar to our - Hebrew rich morphology
+
+8. Results - 
+	8.1. "Probability Tree"
+	8.2. How do we choose the paths?
+	
+9. Evaluation 
+	9.1. The problems - 
+		9.1.1 - need for Gold tree - Known word in the wordnet
+		9.2.2 - different sizes
+		9.2.3 - not a tree - different paths
+	9.2. Equality between graphs
+	9.3. Thinning
+
+10. Baseline (Maybe move the section)
+	10.1. Baseline Method + Evaluation
+
+11. Examples and results
+
+
+12. Bibilography - 
+	Google C Word2Vec Code
+	nltk Wordnet
+ 
