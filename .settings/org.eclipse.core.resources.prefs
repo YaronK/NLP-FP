@@ -1,9 +1,9 @@
 eclipse.preferences.version=1
-encoding/baseline.py=utf-8
 encoding/conversion.py=utf-8
 encoding/corpora.py=utf-8
 encoding/evaluation.py=utf-8
 encoding/main.py=utf-8
+encoding/nikud.py=utf-8
 encoding/synset_graph.py=utf-8
 encoding/synset_node.py=utf-8
 encoding/translation.py=utf-8

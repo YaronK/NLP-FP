@@ -1,7 +1,31 @@
 from synset_graph import SynsetGraph
+from nltk.corpus import wordnet as WN
 
 
 class SynsetGraphExtension:
+    @staticmethod
+    def build_baseline_graph():
+        entity_synset = WN.synset('entity.n.01')  # @UndefinedVariable
+        return SynsetGraph("Baseline", {entity_synset: 1.0})
+
+    @staticmethod
+    def build_word2vec_graph(word, number_of_synsets, wnUtilities):
+        word2vec_synsets = \
+            wnUtilities.get_word2vec_similar_synsets(word, number_of_synsets)
+        if word2vec_synsets is None:
+            print ("No word2vec similar synsets for {}\n".format(word))
+            return
+        word2vec_graph = SynsetGraph("word2vec", word2vec_synsets)
+        return word2vec_graph
+
+    @staticmethod
+    def build_gold_graph(word, wnUtilities):
+        gold_synsets = wnUtilities.get_gold_synsets(word)
+        if gold_synsets is None:
+            print ("No wordnet synsets were found for {}\n".format(word))
+            return
+        return SynsetGraph("Gold", gold_synsets)
+
     @staticmethod
     def thin_out_graph_by_leaves(graph, number_of_leaves):
         leaf_synset_nodes = sorted(graph.get_leaf_synset_nodes(),
