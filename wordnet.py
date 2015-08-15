@@ -84,7 +84,7 @@ class WordnetUtilities:
         if synsets_number == 0:
             ts = Translator()
             eng_word = ts.translate(heb_word)
-            synsets = wn.synsets(eng_word)  # @UndefinedVariable
+            synsets = wordnet.synsets(eng_word)  # @UndefinedVariable
             synsets_number = len(synsets)
             if synsets_number == 0:
                 print("No real Synset has been found")
