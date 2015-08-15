@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.synset_node import SynsetNode
-import os
+
 
 class SynsetGraph(object):
     def __init__(self, name, synset_weights_dictionary):
@@ -87,7 +87,9 @@ class SynsetGraph(object):
             node = list(node.hyponym_nodes.keys())[0]
             temp += " > " + node.synset.name()
         temp += "({0:.3f})\n".format(node.total_probability())
-        for hyponym_node in node.hyponym_nodes:
+        sorted_hyponym_nodes = sorted(node.hyponym_nodes,
+                                      key=lambda n: n.get_synset().name())
+        for hyponym_node in sorted_hyponym_nodes:
             temp += self._display_node(hyponym_node, indentation + 1)
         return temp
 
