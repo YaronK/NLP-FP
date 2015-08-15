@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.synset_node import SynsetNode
+from nltk.corpus import wordnet
 
 
 class SynsetGraph(object):
@@ -13,6 +14,7 @@ class SynsetGraph(object):
         self._init_nodes(leaf_synsets)
         self._init_edges(leaf_synsets)
         self.root_node = self._find_root_node()
+        print(self.display())
 
         self._calculate_weights(leaf_synsets, synset_weights_dictionary)
         self._calculate_probabilities()
@@ -50,11 +52,23 @@ class SynsetGraph(object):
         self.get_entity_node().add_probability(1)
 
     def _find_root_node(self):
-        synset = list(self.get_synsets())[0]
-        while not self.get_synset_node(synset).is_root():
-            hypernyms = synset.hypernyms()
-            synset = hypernyms[0]
-        return self.get_synset_node(synset)
+        synsets = list(self.get_synsets())
+        roots = dict()
+        for synset in synsets:
+            paths = synset.hypernym_paths()
+            root = paths[0]
+            while type(root) is list:
+                root = root[0]
+            roots[root.name()] = True
+
+        return self._add_global_root(roots)
+
+    def _add_global_root(self, roots):
+        global_root = SynsetNode('root')
+        for root in roots:
+            global_root.add_hyponym(root)
+
+        return global_root
 
     def get_entity_node(self):
         return self.root_node
