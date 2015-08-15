@@ -12,7 +12,7 @@ def main():
     # synsets_number = int(input("Enter the number of synsets:"))
 
     word = "חתול"
-    number_of_synsets = 30
+    number_of_synsets = 3
 
     vector_file_path = "vectors-g.bin"
 

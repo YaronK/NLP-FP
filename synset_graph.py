@@ -12,6 +12,7 @@ class SynsetGraph(object):
 
         self._init_nodes(leaf_synsets)
         self._init_edges(leaf_synsets)
+        self.root_node = self._find_root_node()
 
         self._calculate_weights(leaf_synsets, synset_weights_dictionary)
         self._calculate_probabilities()
@@ -48,12 +49,15 @@ class SynsetGraph(object):
     def _calculate_probabilities(self):
         self.get_entity_node().add_probability(1)
 
+    def _find_root_node(self):
+        synset = list(self.get_synsets())[0]
+        while not self.get_synset_node(synset).is_root():
+            hypernyms = synset.hypernyms()
+            synset = hypernyms[0]
+        return self.get_synset_node(synset)
+
     def get_entity_node(self):
-        entity_synset = [synset
-                         for synset in self.get_synsets()
-                         if synset.name() == "entity.n.01"][0]
-        # TODO: find the root in a better way
-        return self.get_synset_node(entity_synset)
+        return self.root_node
 
     def get_leaf_synsets(self):
         return self.leaf_synsets
