@@ -1,5 +1,11 @@
 # coding: utf-8
+"""
+corpora python script convert large data of corpus files to one corpus
 
+Input: the folder with the text files
+Output: one file with the corpus
+
+"""
 import xml.etree.ElementTree as ET
 import sys
 import re
