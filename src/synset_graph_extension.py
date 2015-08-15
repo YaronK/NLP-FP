@@ -32,7 +32,10 @@ class SynsetGraphExtension:
 
     @staticmethod
     def thin_out_graph_by_leaves(graph, number_of_leaves):
-        leaf_synset_nodes = sorted(graph.get_leaf_synset_nodes(),
+        leaf_synset_nodes = graph.get_leaf_synset_nodes()
+        leaf_synset_nodes = sorted(leaf_synset_nodes,
+                                   key=lambda n: n.get_synset().name())
+        leaf_synset_nodes = sorted(leaf_synset_nodes,
                                    key=lambda n: n.total_weight(),
                                    reverse=True)[:number_of_leaves]
         synset_weights_dictionary = {node.get_synset(): node.total_weight()
