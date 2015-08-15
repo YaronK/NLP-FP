@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from src.evaluation import compare_graph_pair
+from src.evaluation import SynsetGraphComarison
 from src.synset_graph_extension import SynsetGraphExtension as SGE
 from src.wordnet import WordnetUtilities
 from src.word2vec import Word2VecUtilities
@@ -29,10 +29,9 @@ def main():
     gold_graph = SGE.build_gold_graph(word, wnUtilities)
     # print (gold_graph.display())
 
-    compare_graph_pair(baseline_graph, gold_graph)
-    compare_graph_pair(test_graph, gold_graph)
-    compare_graph_pair(test_graph, gold_graph, SGE.thin_out_graph_by_leaves)
-    compare_graph_pair(test_graph, gold_graph, SGE.thin_out_graph_by_paths)
+    comparison = SynsetGraphComarison(baseline_graph, test_graph, gold_graph)
+    comparison.compare_using_all_methods()
+    comparison.dump_to_file("{}-{}.txt".format(word, number_of_synsets))
 
 
 if __name__ == '__main__':
