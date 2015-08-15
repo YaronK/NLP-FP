@@ -25,12 +25,6 @@ def main():
         print ("No word2vec similar synsets were found for {}\n".format(word))
         return
 
-    word2vec_synsets = \
-        wnUtilities.get_word2vec_similar_synsets(word, number_of_synsets)
-    word2vec_synsets = [(s, word2vec_synsets[s]) for s in word2vec_synsets]
-
-    print(sorted(word2vec_synsets, key=lambda x: x[0].name()))
-
     test_graph = SynsetGraph("Test", word2vec_synsets)
     test_graph.print_tree()
     print ("-----------------------------")
