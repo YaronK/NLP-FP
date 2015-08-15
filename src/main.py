@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from src.evaluation import Evaluation
+from src.evaluation import compare_graph_pair
 from src.synset_graph_extension import SynsetGraphExtension as SGE
 from src.wordnet import WordnetUtilities
 from src.word2vec import Word2VecUtilities
@@ -13,37 +13,27 @@ def main():
     # thinning_method = (input("Use thinning Method? (True/None:")
 
     word = "חתול"
-    number_of_synsets = 3
+    number_of_synsets = 20
     vector_file_path = "../data/vectors-g.bin"
-    thinning_method = None  # SGE.thin_out_graph_by_paths
-    # thinning_method = SGE.thin_out_graph_by_paths
 
     w2vUtilities = Word2VecUtilities()
     w2vUtilities.load_vectors_from(vector_file_path)
     wnUtilities = WordnetUtilities(w2vUtilities)
 
     test_graph = SGE.build_word2vec_graph(word, number_of_synsets, wnUtilities)
-    print_graph(test_graph)
+    # print (test_graph.display())
 
     baseline_graph = SGE.build_baseline_graph()
-    print_graph(baseline_graph)
+    # print (baseline_graph.display())
 
     gold_graph = SGE.build_gold_graph(word, wnUtilities)
-    print_graph(gold_graph)
+    # print (gold_graph.display())
 
-    evaluate(baseline_graph, gold_graph, thinning_method)
-    evaluate(test_graph, gold_graph, thinning_method)
+    compare_graph_pair(baseline_graph, gold_graph)
+    compare_graph_pair(test_graph, gold_graph)
+    compare_graph_pair(test_graph, gold_graph, SGE.thin_out_graph_by_leaves)
+    compare_graph_pair(test_graph, gold_graph, SGE.thin_out_graph_by_paths)
 
-
-def evaluate(decoded_graph, gold_graph, thinning_method):
-    result = Evaluation.evaluate(decoded_graph, gold_graph,
-                                 thinning_method)
-    print("Evaluate: {0:.3f}".format(result))
-
-
-def print_graph(graph):
-    graph.print_tree()
-    print ("-----------------------------")
 
 if __name__ == '__main__':
     main()

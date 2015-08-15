@@ -15,16 +15,20 @@ class SynsetGraphExtension:
         if word2vec_synsets is None:
             print ("No word2vec similar synsets for {}\n".format(word))
             return
-        word2vec_graph = SynsetGraph("word2vec", word2vec_synsets)
+        word2vec_graph = SynsetGraph("Word2Vec", word2vec_synsets)
         return word2vec_graph
 
     @staticmethod
     def build_gold_graph(word, wnUtilities):
         gold_synsets = wnUtilities.get_gold_synsets(word)
         if gold_synsets is None:
-            print ("No wordnet synsets were found for {}\n".format(word))
+            print ("No WordNet synsets were found for {}\n".format(word))
             return
         return SynsetGraph("Gold", gold_synsets)
+
+    @staticmethod
+    def no_thinning(graph, number_of_leaves):
+        return graph
 
     @staticmethod
     def thin_out_graph_by_leaves(graph, number_of_leaves):
@@ -34,7 +38,7 @@ class SynsetGraphExtension:
         synset_weights_dictionary = {node.get_synset(): node.total_weight()
                                      for node in leaf_synset_nodes}
 
-        return SynsetGraph("Thinner" + graph.name, synset_weights_dictionary)
+        return SynsetGraph("Thinner-" + graph.name, synset_weights_dictionary)
 
     @staticmethod
     def thin_out_graph_by_paths(graph, number_of_leaves):
@@ -53,4 +57,4 @@ class SynsetGraphExtension:
             del synset_weights[temp_synset]
             temp_grpah = SynsetGraph("Temp", synset_weights)
 
-        return SynsetGraph("Thinner" + graph.name, chosen_synsets)
+        return SynsetGraph("Thinner-" + graph.name, chosen_synsets)
