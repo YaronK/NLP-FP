@@ -44,8 +44,11 @@ Sections:
 
 11. Examples and results
 
+12. Conclusion - Future work etc
 
-12. Bibilography - 
+13. Apendix A - who did what?
+
+14. Bibilography - 
 	Google C Word2Vec Code
 	nltk Wordnet
  
