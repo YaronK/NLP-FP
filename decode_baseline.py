@@ -8,6 +8,7 @@ def baseline_decoder():
 
     dic = {synset: 1}
     name = "baseline"
+
     test_graph = SynsetGraph(name, dic)
     test_graph.print_tree()
     return test_graph
