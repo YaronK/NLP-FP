@@ -15,7 +15,7 @@ def main():
 
     # chosen_words = choose_random_words(10, "../data/wn-data-heb-BliNikud.tab")
     chosen_words = ["אוביקט"]
-    number_of_synsets = 20
+    number_of_synsets = 3
     vector_file_path = "../data/vectors-g.bin"
 
     w2vUtilities = Word2VecUtilities()

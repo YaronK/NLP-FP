@@ -12,6 +12,7 @@ Sections:
 	4.1. C code - Where from.. etc
 	4.2. Vectors-g.bin (Data folder)
 	4.3. Python nltk
+	4.4. explain parameters in C code
 
 5. Wordnet
 	5.1. Hebrew OMW (Technion Haifa)
