@@ -41,10 +41,10 @@ class SynsetNode(object):
             hyponym_node.add_probability(hyponym_probability, self)
 
     def is_leaf(self):
-        return len(self.hypernym_nodes) == 0
+        return len(self.hyponym_nodes) == 0
 
     def is_root(self):
-        return len(self.hyponym_nodes) == 0
+        return len(self.hypernym_nodes) == 0
 
     def get_hypernym_nodes(self):
         return list(self.hypernym_nodes.keys())

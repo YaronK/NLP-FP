@@ -2,6 +2,7 @@
 
 from evaluation import Evaluation
 from synset_graph import SynsetGraph
+from synset_graph_extension import SynsetGraphExtension as SGE
 from wordnet import WordnetUtilities
 from word2vec import Word2VecUtilities
 
@@ -42,7 +43,8 @@ def evaluate(word, test_graph, wnUtilities):
     gold_graph.print_tree()
     print ("-----------------------------")
 
-    result = Evaluation.evaluate(test_graph, gold_graph, False)
+    result = Evaluation.evaluate(test_graph, gold_graph,
+                                 SGE.thin_out_graph_by_paths)
     print("Evaluate: {0:.3f}".format(result))
 
 if __name__ == '__main__':
