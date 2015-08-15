@@ -10,4 +10,4 @@ class SynsetGraphExtension:
         synset_weights_dictionary = {node.get_synset(): node.total_weight()
                                      for node in leaf_synset_nodes}
 
-        return SynsetGraph(synset_weights_dictionary)
+        return SynsetGraph("Thinner" + graph.name, synset_weights_dictionary)

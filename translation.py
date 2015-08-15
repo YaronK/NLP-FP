@@ -12,7 +12,8 @@ class Translator:
 
     def translate(self, heb_word):
         self.url = ("https://translate.yandex.net/api/v1.5/tr/translate?" +
-                    "key={0}&lang=he-en&text={1}".format(Translator.key, heb_word))
+                    "key={0}&lang=he-en&text={1}".format(Translator.key,
+                                                         heb_word))
         try:
             response = requests.get(self.url)
         except Exception as exception:
@@ -23,6 +24,5 @@ class Translator:
         translation = tree.find("text").text
 
         if HebrewString(translation).heb_ltrs() == translation:
-            print ("Could not translate {}".format(heb_word))
             return None
         return translation

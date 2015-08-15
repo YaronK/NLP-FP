@@ -2,7 +2,7 @@
 
 from evaluation import Evaluation
 from synset_graph import SynsetGraph
-from wordnet import WordnetUtilities as WNUtils
+from wordnet import WordnetUtilities
 from word2vec import Word2VecUtilities
 
 
@@ -11,33 +11,42 @@ def main():
     # synsets_number = int(input("Enter the number of synsets:"))
 
     word = "חתול"
-    number_of_synsets = 20
+    number_of_synsets = 30
 
     vector_file_path = "vectors-g.bin"
 
     w2vUtilities = Word2VecUtilities()
     w2vUtilities.load_vectors_from(vector_file_path)
-    word2vec_synsets = WNUtils.get_word2vec_similar_synsets(word,
-                                                            number_of_synsets,
-                                                            w2vUtilities)
+    wnUtilities = WordnetUtilities(w2vUtilities)
+
+    word2vec_synsets = \
+        wnUtilities.get_word2vec_similar_synsets(word, number_of_synsets)
     if word2vec_synsets is None:
         print ("No word2vec similar synsets were found for {}\n".format(word))
         return
 
-    test_graph = SynsetGraph(word2vec_synsets)
-    print ("\nTEST:")
-    test_graph.print_tree()
-    print ("")
+    word2vec_synsets = \
+        wnUtilities.get_word2vec_similar_synsets(word, number_of_synsets)
+    word2vec_synsets = [(s, word2vec_synsets[s]) for s in word2vec_synsets]
 
-    gold_synsets = WNUtils.get_gold_synsets(word)
+    print(sorted(word2vec_synsets, key=lambda x: x[0].name()))
+
+    test_graph = SynsetGraph("Test", word2vec_synsets)
+    test_graph.print_tree()
+    print ("-----------------------------")
+
+    evaluate(word, test_graph, wnUtilities)
+
+
+def evaluate(word, test_graph, wnUtilities):
+    gold_synsets = wnUtilities.get_gold_synsets(word)
     if gold_synsets is None:
         print ("No wordnet synsets were found for {}\n".format(word))
         return
 
-    gold_graph = SynsetGraph(gold_synsets)
-    print ("\nGOLD:")
+    gold_graph = SynsetGraph("Gold", gold_synsets)
     gold_graph.print_tree()
-    print ("")
+    print ("-----------------------------")
 
     result = Evaluation.evaluate(test_graph, gold_graph, False)
     print("Evaluate: {0:.3f}".format(result))

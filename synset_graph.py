@@ -73,9 +73,10 @@ class SynsetNode(object):
 
 
 class SynsetGraph(object):
-    def __init__(self, synset_weights_dictionary):
+    def __init__(self, name, synset_weights_dictionary):
         super(SynsetGraph, self).__init__()
 
+        self.name = name
         leaf_synsets = set(synset_weights_dictionary.keys())
 
         self._init_nodes(leaf_synsets)
@@ -139,6 +140,7 @@ class SynsetGraph(object):
         return self.synset_to_synset_node_dictionary.values()
 
     def print_tree(self):
+        print ("{0}:".format(self.name))
         self._print_node(self.get_entity_node(), 0)
 
     def _print_node(self, node, indentation):

@@ -3,18 +3,19 @@
 from conversion import HebrewString
 from translation import Translator
 
-from nltk.corpus import wordnet as wn
+from nltk.corpus import wordnet
 
 
 class WordnetUtilities:
+    def __init__(self, word2vec_utilities):
+        self.translator = Translator()
+        self.word2vec = word2vec_utilities
+        self.wordnet = wordnet
 
-    @staticmethod
-    def get_word2vec_similar_synsets(heb_word,
-                                     number_of_required_synsets,
-                                     word2vec_utilities):
+    def get_word2vec_similar_synsets(self, heb_word,
+                                     number_of_required_synsets):
         heb_word = HebrewString(heb_word)
-        translator = Translator()
-        retriever = word2vec_utilities.build_retriever(heb_word.eng_ltrs())
+        retriever = self.word2vec.build_retriever(heb_word.eng_ltrs())
 
         word2vec_suggestions = retriever.get(number_of_required_synsets)
         if word2vec_suggestions is None:
@@ -33,29 +34,12 @@ class WordnetUtilities:
             suggestion = HebrewString(suggestion)
 
             if heb_word.eng_ltrs() in suggestion.eng_ltrs():
-                print("Passed over {0}".format(suggestion.heb_ltrs()))
+                #print("Passed over {0}".format(suggestion.heb_ltrs()))
                 continue
 
-            suggestion_synsets = wn.synsets(  # @UndefinedVariable
-                suggestion.heb_ltrs(), lang='heb')
-
-            if len(suggestion_synsets) != 0:
-                print("Found {0} in Hebrew WN".format(suggestion.heb_ltrs()))
-            else:
-                print("Couldn't find {0} in Hebrew WN".
-                      format(suggestion.heb_ltrs()))
-                translated_text = translator.translate(suggestion.heb_ltrs())
-                if translated_text is None:
-                    continue
-
-                suggestion_synsets = \
-                    wn.synsets(translated_text)  # @UndefinedVariable
-                if len(suggestion_synsets) != 0:
-                    print("Found {0}({1}) in English WN".
-                          format(suggestion.heb_ltrs(), translated_text))
-                else:
-                    print("Couldn't find {0}({1}) in English WN".
-                          format(suggestion.heb_ltrs(), translated_text))
+            suggestion_synsets = self._get_suggestion_synsets(suggestion)
+            if len(suggestion_synsets) == 0:
+                continue
 
             number_of_suggestion_synsets = min(len(suggestion_synsets),
                                                (number_of_required_synsets -
@@ -68,12 +52,33 @@ class WordnetUtilities:
 
         return similar_synsets
 
-    @staticmethod
-    def get_gold_synsets(heb_word):
+    def _get_suggestion_synsets(self, suggestion):
+        suggestion_synsets = self.wordnet.synsets(suggestion.heb_ltrs(),
+                                                  lang='heb')
+        if len(suggestion_synsets) != 0:
+            pass#print("Found {0} in Hebrew WN".format(suggestion.heb_ltrs()))
+        else:
+            #print("Couldn't find {0} in Hebrew WN".
+            #      format(suggestion.heb_ltrs()))
+            translated_text = \
+                self.translator.translate(suggestion.heb_ltrs())
+            if translated_text is None:
+                #print ("Couldn't translate {0}".format(suggestion.heb_ltrs()))
+                return []
+            #print("Translated {0}".format(translated_text))
+            suggestion_synsets = self.wordnet.synsets(translated_text)
+            if len(suggestion_synsets) != 0:
+                pass#print("Found {0}({1}) in English WN".
+                #      format(suggestion.heb_ltrs(), translated_text))
+            else:
+                pass#print("Couldn't find {0}({1}) in English WN".
+                #      format(suggestion.heb_ltrs(), translated_text))
+        return suggestion_synsets
+
+    def get_gold_synsets(self, heb_word):
         heb_word = HebrewString(heb_word)
 
-        synsets = wn.synsets(heb_word.heb_ltrs(),  # @UndefinedVariable
-                             lang='heb')
+        synsets = self.wordnet.synsets(heb_word.heb_ltrs(), lang='heb')
         synsets_number = len(synsets)
         # Case heb_word does not appear in Hebrew Wordnet
         if synsets_number == 0:
