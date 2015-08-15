@@ -1,4 +1,4 @@
-Compared: Word2Vec <-> Gold. Thinning: no_thinning. Result: 0.137
 Compared: Thinner-Word2Vec <-> Gold. Thinning: thin_out_graph_by_paths. Result: 0.812
-Compared: Baseline <-> Gold. Thinning: no_thinning. Result: 0.071
+Compared: Word2Vec <-> Gold. Thinning: no_thinning. Result: 0.137
 Compared: Thinner-Word2Vec <-> Gold. Thinning: thin_out_graph_by_leaves. Result: 0.353
+Compared: Baseline <-> Gold. Thinning: no_thinning. Result: 0.071
