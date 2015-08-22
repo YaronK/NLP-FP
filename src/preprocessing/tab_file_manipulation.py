@@ -70,8 +70,8 @@ def main():
     w2v_utilities = Word2VecUtilities()
     w2v_utilities.load_vectors_from(w2v_vectors_file_path)
 
-    with open(original_heb_wn_tab_file_path, 'r',  encoding="utf8") as original_tab_file:
-        with open(new_heb_wn_tab_file_path, 'w',  encoding="utf8", newline="\n") as new_tab_file:
+    with open(original_heb_wn_tab_file_path, encoding="utf8") as original_tab_file:
+        with open(new_heb_wn_tab_file_path, 'w', encoding="utf8", newline="\n") as new_tab_file:
             for line in original_tab_file:
                 words = line.split()
                 if words[1] == "lemma":

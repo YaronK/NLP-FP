@@ -91,7 +91,7 @@ class SynsetGraph(object):
         return self.synset_weights_dictionary
 
     def dump_to_file(self, path):
-        with open("../exps/" + path, 'w') as file:
+        with open(path, 'w') as file:
             file.write(self.display())
 
     def display(self):

@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//src/conversion.py=utf-8
+encoding//src/decoding.py=utf-8
 encoding//src/evaluation.py=utf-8
 encoding//src/main.py=utf-8
 encoding//src/preprocessing/choose_random_words.py=utf-8

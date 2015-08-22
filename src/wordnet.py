@@ -34,7 +34,7 @@ class WordnetUtilities:
             suggestion = HebrewString(suggestion)
 
             if heb_word.eng_ltrs() in suggestion.eng_ltrs():
-                #print("Passed over {0}".format(suggestion.heb_ltrs()))
+                print("Passed over {0}".format(suggestion.heb_ltrs()))
                 continue
 
             suggestion_synsets = self._get_suggestion_synsets(suggestion)
@@ -56,23 +56,23 @@ class WordnetUtilities:
         suggestion_synsets = self.wordnet.synsets(suggestion.heb_ltrs(),
                                                   lang='heb')
         if len(suggestion_synsets) != 0:
-            pass#print("Found {0} in Hebrew WN".format(suggestion.heb_ltrs()))
+            print("Found {0} in Hebrew WN".format(suggestion.heb_ltrs()))
         else:
-            #print("Couldn't find {0} in Hebrew WN".
-            #      format(suggestion.heb_ltrs()))
+            print("Couldn't find {0} in Hebrew WN".
+                  format(suggestion.heb_ltrs()))
             translated_text = \
                 self.translator.translate(suggestion.heb_ltrs())
             if translated_text is None:
-                #print ("Couldn't translate {0}".format(suggestion.heb_ltrs()))
+                print ("Couldn't translate {0}".format(suggestion.heb_ltrs()))
                 return []
-            #print("Translated {0}".format(translated_text))
+            print("Translated {0}".format(translated_text))
             suggestion_synsets = self.wordnet.synsets(translated_text)
             if len(suggestion_synsets) != 0:
-                pass#print("Found {0}({1}) in English WN".
-                #      format(suggestion.heb_ltrs(), translated_text))
+                print("Found {0}({1}) in English WN".
+                      format(suggestion.heb_ltrs(), translated_text))
             else:
-                pass#print("Couldn't find {0}({1}) in English WN".
-                #      format(suggestion.heb_ltrs(), translated_text))
+                print("Couldn't find {0}({1}) in English WN".
+                      format(suggestion.heb_ltrs(), translated_text))
         return suggestion_synsets
 
     def get_gold_synsets(self, heb_word):

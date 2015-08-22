@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from src.evaluation import SynsetGraphComarison
-from src.synset_graph_extension import SynsetGraphExtension as SGE
 from src.wordnet import WordnetUtilities
 from src.word2vec import Word2VecUtilities
-from src.preprocessing.choose_random_words import choose_random_words
+from src.evaluation import Evaluation
+from src.decoding import Decoding
 
 
 def main():
@@ -14,32 +13,21 @@ def main():
     # thinning_method = (input("Use thinning Method? (True/None:")
 
     # chosen_words = choose_random_words(10, "../data/wn-data-heb-BliNikud.tab")
-    chosen_words = ["כלב"]
-    number_of_synsets = 3
+    number_of_synsets = 5
     vector_file_path = "../data/vectors-y.bin"
 
     w2vUtilities = Word2VecUtilities()
     w2vUtilities.load_vectors_from(vector_file_path)
     wnUtilities = WordnetUtilities(w2vUtilities)
 
-    for word in chosen_words:
-        print(word)
-        decoded_graph = SGE.build_word2vec_graph(word, number_of_synsets,
-                                                 wnUtilities)
+    decoding = Decoding(wnUtilities)
+    word_to_decoded_graph_dict = decoding.decode(number_of_synsets,
+                                                 "../exps/heb_n_10.words")
+    evaluation = Evaluation(wnUtilities)
+    _, category_results = \
+        evaluation.evaluate(number_of_synsets, word_to_decoded_graph_dict)
 
-        decoded_graph.dump_to_file("{}-{}-{}.txt".format(word, "decoded",
-                                                         number_of_synsets))
-
-        baseline_graph = SGE.build_baseline_graph()
-        baseline_graph.dump_to_file("{}-{}.txt".format(word, "baseline"))
-
-        gold_graph = SGE.build_gold_graph(word, wnUtilities)
-        baseline_graph.dump_to_file("{}-{}.txt".format(word, "gold"))
-
-        comparison = SynsetGraphComarison(baseline_graph, decoded_graph,
-                                          gold_graph)
-        comparison.compare_using_all_methods()
-        comparison.dump_to_file("{}-{}.txt".format(word, number_of_synsets))
+    print(category_results)
 
 
 if __name__ == '__main__':
