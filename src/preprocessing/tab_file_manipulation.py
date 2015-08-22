@@ -40,12 +40,12 @@ def _get_removal_apporval(word, word_2_vec, i, letter):
         return retriever.get(1) is not None
 
 
-def check_punctuation(word, word_2_vec):
+def _remove_punctuation(word, word_2_vec):
     hirik = "ִ"
     holam = "ֹ"
     koobotz = "ֻ"
 
-    for i in range(0, len(word)):
+    for i in range(len(word)):
         if word[i] == hirik:
             if _get_removal_apporval(word, word_2_vec, i, "י"):
                 word = _add_letter(word, "י", i)
@@ -63,24 +63,22 @@ def check_punctuation(word, word_2_vec):
 
 
 def main():
-    word_2_vec = Word2VecUtilities()
-    word_2_vec.load_vectors_from("../../data/vectors-g.bin")
+    w2v_vectors_file_path = "../../data/vectors-y.bin"
+    original_heb_wn_tab_file_path = "../../data/wn-data-heb.tab.original_tab_file"
+    new_heb_wn_tab_file_path = "../../data/wn-data-heb.tab"
 
-    f = open(r"../../data/wn-data-heb-Original.tab", 'r',  encoding="utf8")
-    text = ""
+    w2v_utilities = Word2VecUtilities()
+    w2v_utilities.load_vectors_from(w2v_vectors_file_path)
 
-    for line in f:
-        words = line.split()
-        if words[1] == "lemma":
-            for word in words[2:len(words)]:
-                new_word = check_punctuation(word, word_2_vec)
-                line = line.replace(word, new_word)
-                line = line.replace(r"\r\n", r"\n")
-        text += line
-
-    f = open(r"../../data/wn-data-heb-BliNikud.tab", 'w',  encoding="utf8")
-    f.write(text)
-
+    with open(original_heb_wn_tab_file_path, 'r',  encoding="utf8") as original_tab_file:
+        with open(new_heb_wn_tab_file_path, 'w',  encoding="utf8", newline="\n") as new_tab_file:
+            for line in original_tab_file:
+                words = line.split()
+                if words[1] == "lemma":
+                    for word in words[2:len(words)]:
+                        new_word = _remove_punctuation(word, w2v_utilities)
+                        line = line.replace(word, new_word, 1)
+                    new_tab_file.write(line)
 
 if __name__ == '__main__':
     main()

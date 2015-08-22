@@ -14,9 +14,9 @@ def main():
     # thinning_method = (input("Use thinning Method? (True/None:")
 
     # chosen_words = choose_random_words(10, "../data/wn-data-heb-BliNikud.tab")
-    chosen_words = ["אוביקט"]
+    chosen_words = ["כלב"]
     number_of_synsets = 3
-    vector_file_path = "../data/vectors-g.bin"
+    vector_file_path = "../data/vectors-y.bin"
 
     w2vUtilities = Word2VecUtilities()
     w2vUtilities.load_vectors_from(vector_file_path)
