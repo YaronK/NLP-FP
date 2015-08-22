@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from src.synset_node import SynsetNode
-from nltk.corpus import wordnet
 
 
 class SynsetGraph(object):

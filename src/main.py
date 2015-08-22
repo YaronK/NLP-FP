@@ -13,9 +13,9 @@ def main():
     # decode_baseline = (input("Use Baseline? (True/False:")
     # thinning_method = (input("Use thinning Method? (True/None:")
 
-    # chosen_words = choose_random_words(10, "../data/wn-data-heb-BliNikud.tab")
-    chosen_words = ["כלב"]
-    number_of_synsets = 3
+    # chosen_words = choose_random_words(10, "../data/wn-data-hebv.tab")
+    chosen_words = ["חתול"]
+    number_of_synsets = 50
     vector_file_path = "../data/vectors-y.bin"
 
     w2vUtilities = Word2VecUtilities()
