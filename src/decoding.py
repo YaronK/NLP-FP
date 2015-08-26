@@ -12,13 +12,9 @@ class Decoding:
             words = [line[:-1] for line in words_file.readlines()]
         word_to_decoded_graph = dict()
         for word in words:
-            print(word)
+            print("Decoding: " + word)
             decoded_graph = SGE.build_word2vec_graph(word, number_of_synsets,
                                                      self.wnUtilities)
-
-            decoded_graph.dump_to_file("../exps/{}-{}-{}.txt".
-                                       format(word, "decoded",
-                                              number_of_synsets))
 
             word_to_decoded_graph[word] = decoded_graph
         return word_to_decoded_graph
