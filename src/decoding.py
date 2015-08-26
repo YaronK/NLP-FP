@@ -1,6 +1,6 @@
+# -*- coding: utf-8 -*-
 
-
-from src.synset_graph_extension import SynsetGraphExtension as SGE
+from synset.graph_extension import SynsetGraphExtension as SGE
 
 
 class Decoding:

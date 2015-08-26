@@ -1,4 +1,5 @@
-from src.synset_graph_extension import SynsetGraphExtension as SGE
+# -*- coding: utf-8 -*-
+from synset.graph_extension import SynsetGraphExtension as SGE
 
 
 class SynsetGraphComarison():

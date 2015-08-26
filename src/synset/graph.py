@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.synset_node import SynsetNode
+from synset.node import SynsetNode
 
 
 class SynsetGraph(object):

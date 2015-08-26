@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import os.path
-import requests
-import xml.etree.ElementTree as ET
-from src.conversion import HebrewString
 import pickle
+
+import requests
+
+from utilities.conversion import HebrewString
+import xml.etree.ElementTree as ET
 
 
 class Translator:

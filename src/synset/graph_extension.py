@@ -1,5 +1,7 @@
-from src.synset_graph import SynsetGraph
+# -*- coding: utf-8 -*-
 from nltk.corpus import wordnet as WN
+
+from synset.graph import SynsetGraph
 
 
 class SynsetGraphExtension:

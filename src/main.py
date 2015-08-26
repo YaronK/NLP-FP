@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from src.wordnet import WordnetUtilities
-from src.word2vec import Word2VecUtilities
-from src.evaluation import Evaluation
-from src.decoding import Decoding
+from decoding import Decoding
+from evaluation import Evaluation
+from utilities.word2vec import Word2VecUtilities
+from utilities.wordnet import WordnetUtilities
 
 
 def main():

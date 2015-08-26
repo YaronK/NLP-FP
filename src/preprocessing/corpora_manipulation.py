@@ -1,15 +1,15 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 """
-corpora python script convert large data of corpus files to one corpus
+Used to merge several corpus files into one.
 
-Input: the folder with the text files
-Output: one file with the corpus
-
+Input: The folder with the text files
+Output: One file with the corpus
 """
-import xml.etree.ElementTree as ET
-import sys
-import re
 import os
+import re
+import sys
+
+import xml.etree.ElementTree as ET
 
 
 def match_word(strg, search=re.compile(r'[^a-z]').search):

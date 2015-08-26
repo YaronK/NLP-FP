@@ -1,4 +1,4 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 """
 choose_random_words python script goes through the Hebrew wordnet,
 and chooses random words to be evaluated
@@ -8,9 +8,12 @@ Output: x random words
 
 """
 import random
-from nltk.corpus import wordnet
+
 from gensim.models import Word2Vec
-from src.conversion import HebrewString
+from nltk.corpus import wordnet
+
+from utilities.conversion import HebrewString
+
 
 out_dir_path = "../../exps/"
 

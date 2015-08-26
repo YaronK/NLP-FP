@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from src.conversion import HebrewString
-from src.translation import Translator
-
 from nltk.corpus import wordnet
+
+from utilities.conversion import HebrewString
+from utilities.translation import Translator
 
 
 class WordnetUtilities:

@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-nikud python script, convert a Hebrew text with punctuation to "Htiv Male"
+Modifies a tab file for our application's needs.
 
-Input: a Hebrew text with punctuation
-Output: a Hebrew text in "Htiv Male"
+1. Removes punctuation (Niqqud), converting text to Ktiv Male.
+2. Keeps only 'lemma' lines, since 'def' lines caused problems
+for nltk and not necessary for our application.
 
-nikud script uses known grammtical Hebrew rules for the conversion, and uses
-Hebrew corpus to validate the words
+Input: A Hebrew tab file path
+Output: A modified Hebrew tab file
 """
-from src.word2vec import Word2VecUtilities
-from src.conversion import HebrewString
+from utilities.conversion import HebrewString
+from utilities.word2vec import Word2VecUtilities
 
 
 def _check_validity_letter(order):
@@ -64,21 +65,22 @@ def _remove_punctuation(word, word_2_vec):
 
 def main():
     w2v_vectors_file_path = "../../data/vectors-y.bin"
-    original_heb_wn_tab_file_path = "../../data/wn-data-heb.tab.original_tab_file"
-    new_heb_wn_tab_file_path = "../../data/wn-data-heb.tab"
+    original_file_path = "../../data/wn-data-heb.tab.original_file"
+    new_file_path = "../../data/wn-data-heb.tab"
 
     w2v_utilities = Word2VecUtilities()
     w2v_utilities.load_vectors_from(w2v_vectors_file_path)
 
-    with open(original_heb_wn_tab_file_path, encoding="utf8") as original_tab_file:
-        with open(new_heb_wn_tab_file_path, 'w', encoding="utf8", newline="\n") as new_tab_file:
-            for line in original_tab_file:
+    with open(original_file_path, encoding="utf8") as original_file:
+        with open(new_file_path, 'w', encoding="utf8",
+                  newline="\n") as new_file:
+            for line in original_file:
                 words = line.split()
                 if words[1] == "lemma":
                     for word in words[2:len(words)]:
                         new_word = _remove_punctuation(word, w2v_utilities)
                         line = line.replace(word, new_word, 1)
-                    new_tab_file.write(line)
+                    new_file.write(line)
 
 if __name__ == '__main__':
     main()
