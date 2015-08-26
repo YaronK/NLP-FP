@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Modifies a tab file for our application's needs.
+Modifies a tab file for our application's needs:
 
-1. Removes punctuation (Niqqud), converting text to Ktiv Male.
-2. Keeps only 'lemma' lines, since 'def' lines caused problems
-for nltk and not necessary for our application.
+1.  Removes punctuation (Niqqud), converting text to Ktiv Male.
+2.  Keeps only 'lemma' lines, since 'def' lines caused problems
+    for nltk and not necessary for our application.
 
 Input: A Hebrew tab file path
 Output: A modified Hebrew tab file
@@ -13,7 +13,7 @@ from utilities.conversion import HebrewString
 from utilities.word2vec import Word2VecUtilities
 
 
-def _check_validity_letter(order):
+def _is_letter_hebrew(order):
     return order in range(1488, 1515) or order == 32 or order == 45
 
 
@@ -22,42 +22,42 @@ def _remove_puncutation(word):
     for letter in word:
         letter_order = ord(letter)
 
-        if _check_validity_letter(letter_order):
+        if _is_letter_hebrew(letter_order):
             new_word += letter
     return new_word
 
 
-def _add_letter(word, letter, i):
+def _add_letter_at_index(word, letter, i):
     return word[0:i] + letter + word[i+1:len(word)]
 
 
-def _get_removal_apporval(word, word_2_vec, i, letter):
+def _should_replace_with_letter(word, w2v_utilities, i, letter):
     if i != len(word) and word[i - 1] != letter and word[i+1] != letter:
-        new_word = _add_letter(word, letter, i)
+        new_word = _add_letter_at_index(word, letter, i)
         new_word = _remove_puncutation(new_word)
-        eng_letters = HebrewString(new_word)
-        retriever = word_2_vec.build_retriever(eng_letters.eng_ltrs())
+        heb_string = HebrewString(new_word)
+        retriever = w2v_utilities.build_retriever(heb_string.eng_ltrs())
 
         return retriever.get(1) is not None
 
 
-def _remove_punctuation(word, word_2_vec):
+def _remove_punctuation(word, w2v_utilities):
     hirik = "ִ"
     holam = "ֹ"
     koobotz = "ֻ"
 
     for i in range(len(word)):
         if word[i] == hirik:
-            if _get_removal_apporval(word, word_2_vec, i, "י"):
-                word = _add_letter(word, "י", i)
+            if _should_replace_with_letter(word, w2v_utilities, i, "י"):
+                word = _add_letter_at_index(word, "י", i)
                 i -= 1
         if word[i] == holam:
-            if _get_removal_apporval(word, word_2_vec, i, "ו"):
-                word = _add_letter(word, "ו", i)
+            if _should_replace_with_letter(word, w2v_utilities, i, "ו"):
+                word = _add_letter_at_index(word, "ו", i)
                 i -= 1
         if word[i] == koobotz:
-            if _get_removal_apporval(word, word_2_vec, i, "ו"):
-                word = _add_letter(word, "ו", i)
+            if _should_replace_with_letter(word, w2v_utilities, i, "ו"):
+                word = _add_letter_at_index(word, "ו", i)
                 i -= 1
 
     return _remove_puncutation(word)
