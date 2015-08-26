@@ -34,7 +34,6 @@ def list_files(root_dir):
     for dir_, _, files in os.walk(root_dir):
         for fileName in files:
             if fileName.endswith('.xml'):
-                # if fileName.endswith('.txt'):
                 relDir = os.path.relpath(dir_, root_dir)
                 relFile = os.path.join(relDir, fileName)
                 file_set.add(relFile)
@@ -48,12 +47,10 @@ def parse_from_folders(path):
         dir_ = path + '\\' + str(dir_counter)
         dir_counter += 1
 
-        # Build 1 parsed text file from the entire director
         text = ''
         files = list_files(dir_)
         for text_file in files:
             text += parse(dir_ + '\\' + text_file)
-            # Write the file of the directory
         output_file = open(dir_ + 'corpus.txt', 'w')
         output_file.write(text.encode('utf8'))
         output_file.close()
@@ -72,5 +69,5 @@ def combine_text_file(path):
 
 if __name__ == '__main__':
     path = sys.argv[1]
-    # parse_from_folders(path)
-    # combine_text_file(path)
+    parse_from_folders(path)
+    combine_text_file(path)
