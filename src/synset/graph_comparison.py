@@ -18,14 +18,13 @@ class SynsetGraphComarison():
 
         compare_single(baseline_graph, gold_graph, SGE.no_thinning)
         compare_single(decoded_graph, gold_graph, SGE.no_thinning)
-        compare_single(decoded_graph, gold_graph, SGE.thin_out_graph_by_leaves)
-        compare_single(decoded_graph, gold_graph, SGE.thin_out_graph_by_paths)
+        compare_single(decoded_graph, gold_graph,
+                       SGE.thin_by_leaf_probabilities)
+        compare_single(decoded_graph, gold_graph,
+                       SGE.thin_by_probability_paths)
 
     def compare_using_a_single_method(self, decoded_graph, gold_graph,
                                       thinning_method):
-        if (decoded_graph, gold_graph, thinning_method) in self.results:
-            return self.results[(decoded_graph, gold_graph, thinning_method)]
-
         number_of_gold_leaves = len(gold_graph.get_leaf_synsets())
         number_of_test_leaves = len(decoded_graph.get_leaf_synsets())
 
@@ -61,6 +60,6 @@ class SynsetGraphComarison():
                                               thinning_method,
                                               result))
         results = sorted(results)
-        with open("../results/" + path, 'w') as file:
+        with open(path, 'w', encoding='utf8') as file:
             for result in results:
                 file.write(result)

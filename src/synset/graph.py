@@ -3,7 +3,14 @@ from synset.node import SynsetNode
 
 
 class SynsetGraph(object):
+    """
+    A graph of SynsetNodes.
+    """
     def __init__(self, name, synset_weights_dictionary):
+        """
+        Given a synset:similarity mapping, constructs a graph of
+        synset nodes.
+        """
         super(SynsetGraph, self).__init__()
 
         self.name = name
@@ -12,12 +19,12 @@ class SynsetGraph(object):
 
         self._init_nodes(leaf_synsets)
         self._init_edges(leaf_synsets)
-        self.root_node = self._find_root_node()
 
         self._calculate_weights(leaf_synsets, synset_weights_dictionary)
         self._calculate_probabilities()
 
     def _init_nodes(self, leaf_synsets):
+        self.root_node = SynsetNode(None)
         hypernym_paths = [hypernym_path
                           for synset in leaf_synsets
                           for hypernym_path in synset.hypernym_paths()]
@@ -40,6 +47,7 @@ class SynsetGraph(object):
 
                     hyponym_node.add_hypernym(hypernym_node)
                     hypernym_node.add_hyponym(hyponym_node)
+        self._init_root_node_edges()
 
     def _calculate_weights(self, leaf_synsets, synset_weights_dictionary):
         for leaf in leaf_synsets:
@@ -49,7 +57,7 @@ class SynsetGraph(object):
     def _calculate_probabilities(self):
         self.get_entity_node().add_probability(1)
 
-    def _find_root_node(self):
+    def _init_root_node_edges(self):
         synsets = list(self.get_synsets())
         roots = set()
         for synset in synsets:
@@ -58,15 +66,9 @@ class SynsetGraph(object):
                 root = root[0]
             roots.add(self.get_synset_node(root))
 
-        return self._add_global_root(roots)
-
-    def _add_global_root(self, roots):
-        global_root = SynsetNode(None)
         for root in roots:
-            global_root.add_hyponym(root)
-            root.add_hypernym(global_root)
-
-        return global_root
+            self.root_node.add_hyponym(root)
+            root.add_hypernym(self.root_node)
 
     def get_entity_node(self):
         return self.root_node
@@ -89,8 +91,8 @@ class SynsetGraph(object):
     def get_synset_weights_dictionary(self):
         return self.synset_weights_dictionary
 
-    def dump_to_file(self, path):
-        with open(path, 'w') as file:
+    def dump_to_file(self, dir_path):
+        with open(dir_path, 'w', encoding='utf8') as file:
             file.write(self.display())
 
     def display(self):

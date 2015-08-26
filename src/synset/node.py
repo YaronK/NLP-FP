@@ -2,6 +2,10 @@
 
 
 class SynsetNode(object):
+    """
+    A container for the NLTK synset, adding weight and
+    probability.
+    """
     def __init__(self, synset):
         super(SynsetNode, self).__init__()
 
@@ -18,6 +22,10 @@ class SynsetNode(object):
             self.hyponym_nodes[hyponym_node] = 0
 
     def add_weight(self, weight, from_hyponym=None):
+        """
+        Adds to the weight the synset has received from from_hyponym.
+        Splits the weight between the synset's hypernyms.
+        """
         if from_hyponym is None:  # i.e. leaf
             self._total_weight = weight
         else:
@@ -30,6 +38,10 @@ class SynsetNode(object):
             hypernym_node.add_weight(weight_per_hypernym, self)
 
     def add_probability(self, probability, from_hypernym=None):
+        """
+        Adds to the probability the synset has received from from_hypernym.
+        Splits the probability between the synset's hyponyms.
+        """
         if from_hypernym is None:
             self._total_probability = probability
         else:
@@ -56,13 +68,13 @@ class SynsetNode(object):
         return self.synset
 
     def total_weight(self):
-        #  Should be called only after weights have been calculated
+        #  Should only be called only after weights have been calculated
         if not hasattr(self, "_total_weight"):
             self._total_weight = sum(self.hyponym_nodes.values())
         return self._total_weight
 
     def total_probability(self):
-        #  Should be called only after probabilities have been calculated
+        #  Should only be called only after probabilities have been calculated
         if not hasattr(self, "_total_probability"):
             self._total_probability = sum(self.hypernym_nodes.values())
         return self._total_probability
