@@ -33,8 +33,33 @@ def write_random_words_to_file(number_of_words, pos, lang,
             out_file.write(noun + "\n")
     return out_path
 
+
+def pos_to_wordnets(argument):
+    return {
+        1: wordnet.ADJ,
+        2: wordnet.ADJ_SAT,
+        3: wordnet.ADV,
+        4: wordnet.NOUN,
+        5: wordnet.VERB,
+    }.get(int(argument), None)
+
+
 if __name__ == '__main__':
-    w2v_vector_file_path = "../../data/vectors-y.bin"
-    out_dir_path = "../../exps/"
-    write_random_words_to_file(10, wordnet.NOUN, "heb", w2v_vector_file_path,
-                               out_dir_path)
+    # w2v_vector_file_path = "../../data/vectors-y.bin"
+    # out_dir_path = "../../exps/"
+    w2v_vector_file_path = input("Please enter vector file path\n")
+    out_dir_path = input("\nPlease enter destination directory\n")
+    numb_of_words = int(input("\nPlease enter the number of random words\n"))
+
+    print("\nPlease enter the number of the POS:")
+    pos = input("[ADJ, ADJ_SAT, ADV, NOUN, VERB]: [1,2,3,4,5]\n")
+    pos = pos_to_wordnets(pos)
+
+    lang = input("\nPlease enter required language (heb for Hebrew)\n")
+
+    try:
+        write_random_words_to_file(numb_of_words, pos,
+                                   lang, w2v_vector_file_path,
+                                   out_dir_path)
+    except:
+        print("One of the inputs is incorrect, please try again")
