@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-choose_random_words python script goes through the Hebrew wordnet,
-and chooses random words to be evaluated
-
-Input: Hebrew Wordnet
-Output: x random words
-
+Randomly chooses words for the test sets.
+Chooses words which exists both in the w2v vocabulary and
+in the Hebrew WN.
 """
 import random
 
@@ -15,12 +12,10 @@ from nltk.corpus import wordnet
 from utilities.conversion import HebrewString
 
 
-out_dir_path = "../../exps/"
+def write_random_words_to_file(number_of_words, pos, lang,
+                               w2v_vector_file_path, out_dir_path):
 
-
-def write_random_words_to_file(number_of_words, pos, lang):
-    vector_file_path = "../../data/vectors-y.bin"
-    weight_matrix = Word2Vec.load_word2vec_format(vector_file_path,
+    weight_matrix = Word2Vec.load_word2vec_format(w2v_vector_file_path,
                                                   binary=True)
     w2v_heb_words = {HebrewString(word).heb_ltrs()
                      for word in weight_matrix.vocab}
@@ -39,4 +34,7 @@ def write_random_words_to_file(number_of_words, pos, lang):
     return out_path
 
 if __name__ == '__main__':
-    write_random_words_to_file(10, wordnet.NOUN, "heb")
+    w2v_vector_file_path = "../../data/vectors-y.bin"
+    out_dir_path = "../../exps/"
+    write_random_words_to_file(10, wordnet.NOUN, "heb", w2v_vector_file_path,
+                               out_dir_path)
