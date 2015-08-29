@@ -4,6 +4,9 @@ import os
 
 from synset.graph_comparison import SynsetGraphComarison
 from synset.graph_extension import SynsetGraphExtension as SGE
+from utilities.word2vec import Word2VecUtilities
+from utilities.wordnet import WordnetUtilities
+from decoding import Decoding
 
 
 class Evaluation:
@@ -59,3 +62,25 @@ class Evaluation:
     def _create_dir_if_doesnt_exist(self, path):
         if not os.path.exists(path):
             os.makedirs(path)
+
+
+def main():
+    synsets_number = int(input("Enter the number of synsets:\n"))
+    path = input("Please write the path to the wanted" +
+                 "Hebrew words(../exps/heb_n_10.words):\n")
+
+    vector_file_path = "../data/vectors-y.bin"
+
+    w2vUtilities = Word2VecUtilities()
+    w2vUtilities.load_vectors_from(vector_file_path)
+    wnUtilities = WordnetUtilities(w2vUtilities)
+
+    decoding = Decoding(wnUtilities)
+    word_to_decoded_graph_dict = decoding.decode(synsets_number, path)
+
+    evaluation = Evaluation(wnUtilities)
+    evaluation.evaluate(synsets_number, word_to_decoded_graph_dict)
+
+
+if __name__ == '__main__':
+    main()
