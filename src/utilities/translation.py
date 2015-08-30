@@ -4,7 +4,7 @@ import pickle
 
 import requests
 
-from utilities.conversion import HebrewString
+from utilities.transliteration import HebrewString
 import xml.etree.ElementTree as ET
 
 
