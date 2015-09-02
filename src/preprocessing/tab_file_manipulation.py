@@ -9,7 +9,7 @@ Modifies a tab file for our application's needs:
 Input: A Hebrew tab file path
 Output: A modified Hebrew tab file
 """
-from utilities.conversion import HebrewString
+from utilities.transliteration import HebrewString
 from utilities.word2vec import Word2VecUtilities
 
 
@@ -42,12 +42,12 @@ def _should_replace_with_letter(word, w2v_utilities, i, letter):
 
 
 def _remove_punctuation(word, w2v_utilities):
-    hirik = "ִ"
+    hiriq = "ִ"
     holam = "ֹ"
-    koobotz = "ֻ"
+    Qubuts = "ֻ"
 
     for i in range(len(word)):
-        if word[i] == hirik:
+        if word[i] == hiriq:
             if _should_replace_with_letter(word, w2v_utilities, i, "י"):
                 word = _place_letter_at_index(word, "י", i)
                 i -= 1
@@ -55,7 +55,7 @@ def _remove_punctuation(word, w2v_utilities):
             if _should_replace_with_letter(word, w2v_utilities, i, "ו"):
                 word = _place_letter_at_index(word, "ו", i)
                 i -= 1
-        if word[i] == koobotz:
+        if word[i] == Qubuts:
             if _should_replace_with_letter(word, w2v_utilities, i, "ו"):
                 word = _place_letter_at_index(word, "ו", i)
                 i -= 1

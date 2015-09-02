@@ -9,7 +9,7 @@ import random
 from gensim.models import Word2Vec
 from nltk.corpus import wordnet
 
-from utilities.conversion import HebrewString
+from utilities.transliteration import HebrewString
 
 
 def write_random_words_to_file(number_of_words, pos, lang,

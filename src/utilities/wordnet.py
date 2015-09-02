@@ -2,7 +2,7 @@
 
 from nltk.corpus import wordnet
 
-from utilities.conversion import HebrewString
+from utilities.transliteration import HebrewString
 from utilities.translation import Translator
 
 
