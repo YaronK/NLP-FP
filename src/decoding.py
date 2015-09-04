@@ -46,5 +46,11 @@ def main():
         print("decoded for {}:\n{}".format(word, decoded_graph.display()))
 
     print(word_to_decoded_graph_dict)
+
+    print("specific files can be found under 'exps' folder")
+
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except:
+        print("At least one of the input parameters isn't correct")

@@ -81,6 +81,10 @@ def main():
     evaluation = Evaluation(wnUtilities)
     evaluation.evaluate(synsets_number, word_to_decoded_graph_dict)
 
+    print("specific files can be found under 'results' folder")
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except:
+        print("At least one of the input parameters isn't correct")

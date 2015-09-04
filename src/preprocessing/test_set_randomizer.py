@@ -45,17 +45,16 @@ def pos_to_wordnets(argument):
 
 
 if __name__ == '__main__':
-    # w2v_vector_file_path = "../../data/vectors-y.bin"
-    # out_dir_path = "../../exps/"
-    w2v_vector_file_path = input("Please enter vector file path\n")
-    out_dir_path = input("\nPlease enter destination directory\n")
-    numb_of_words = int(input("\nPlease enter the number of random words\n"))
+    w2v_vector_file_path = input("Please enter vector file path" +
+                                 "(../../data/vectors-y.bin)\n")
+    out_dir_path = input("Please enter destination directory(../../exps/)\n")
+    numb_of_words = int(input("Please enter the number of random words\n"))
 
-    print("\nPlease enter the number of the POS:")
+    print("Please enter the number of the POS:")
     pos = input("[ADJ, ADJ_SAT, ADV, NOUN, VERB]: [1,2,3,4,5]\n")
     pos = pos_to_wordnets(pos)
 
-    lang = input("\nPlease enter required language (heb for Hebrew)\n")
+    lang = input("Please enter required language (heb for Hebrew)\n")
 
     try:
         write_random_words_to_file(numb_of_words, pos,
