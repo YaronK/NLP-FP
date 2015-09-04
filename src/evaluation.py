@@ -7,6 +7,7 @@ from synset.graph_extension import SynsetGraphExtension as SGE
 from utilities.word2vec import Word2VecUtilities
 from utilities.wordnet import WordnetUtilities
 from decoding import Decoding
+import sys
 
 
 class Evaluation:
@@ -59,32 +60,38 @@ class Evaluation:
 
         return word_to_comparison_dict, category_results
 
-    def _create_dir_if_doesnt_exist(self, path):
-        if not os.path.exists(path):
-            os.makedirs(path)
+    def _create_dir_if_doesnt_exist(self, words_path):
+        if not os.path.exists(words_path):
+            os.makedirs(words_path)
 
 
-def main():
-    synsets_number = int(input("Enter the number of synsets:\n"))
-    path = input("Please write the path to the wanted" +
-                 "Hebrew words(../exps/heb_n_10.words):\n")
-
-    vector_file_path = "../data/vectors-y.bin"
-
+def main(synsets_number, vector_file_path, words_path):
+    print("Evaluation illustration for: {}, {}, {}".format(number_of_synsets,
+                                                           vector_file_path,
+                                                           words_path))
     w2vUtilities = Word2VecUtilities()
     w2vUtilities.load_vectors_from(vector_file_path)
     wnUtilities = WordnetUtilities(w2vUtilities)
 
     decoding = Decoding(wnUtilities)
-    word_to_decoded_graph_dict = decoding.decode(synsets_number, path)
+    word_to_decoded_graph_dict = decoding.decode(synsets_number, words_path)
 
     evaluation = Evaluation(wnUtilities)
     evaluation.evaluate(synsets_number, word_to_decoded_graph_dict)
 
-    print("specific files can be found under 'results' folder")
+    print("\nEvaluation files can be found under 'results' folder")
 
 if __name__ == '__main__':
+    if len(sys.argv) < 4:
+        print("Not enough arguments, using defaults")
+        number_of_synsets = 3
+        vector_file_path = "../data/vectors-y.bin"
+        words_path = "../exps/heb_n_10.words"
+    else:
+        number_of_synsets = int(sys.argv[1])
+        vector_file_path = sys.argv[2]
+        words_path = sys.argv[3]
     try:
-        main()
+        main(number_of_synsets, vector_file_path, words_path)
     except:
         print("At least one of the input parameters isn't correct")

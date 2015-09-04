@@ -40,11 +40,11 @@ def list_files(root_dir):
     return file_set
 
 
-def parse_from_folders(path):
+def parse_from_folders(words_path):
     dir_counter = 1
     # Loop all folders of corpus
     while dir_counter < 44:
-        dir_ = path + '\\' + str(dir_counter)
+        dir_ = words_path + '\\' + str(dir_counter)
         dir_counter += 1
 
         text = ''
@@ -56,11 +56,11 @@ def parse_from_folders(path):
         output_file.close()
 
 
-def combine_text_file(path):
-    file_set = list_files(path)
+def combine_text_file(words_path):
+    file_set = list_files(words_path)
     text = ''
     for file_ in file_set:
-        opened_file = open(path + file_, 'r')
+        opened_file = open(words_path + file_, 'r')
         text += opened_file.read()
         opened_file.close()
     output_file = open('test.txt', 'w')
@@ -68,6 +68,6 @@ def combine_text_file(path):
     output_file.close()
 
 if __name__ == '__main__':
-    path = sys.argv[1]
-    parse_from_folders(path)
-    combine_text_file(path)
+    words_path = sys.argv[1]
+    parse_from_folders(words_path)
+    combine_text_file(words_path)

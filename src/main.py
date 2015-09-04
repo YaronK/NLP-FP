@@ -5,13 +5,12 @@ from evaluation import Evaluation
 from synset.graph_extension import SynsetGraphExtension as SGE
 from utilities.word2vec import Word2VecUtilities
 from utilities.wordnet import WordnetUtilities
+import sys
 
 
-def main():
-    word = input("Enter a Hebrew word:\n")
-    number_of_synsets = int(input("Enter the number of synsets:\n"))
-    vector_file_path = "../data/vectors-y.bin"
-
+def main(word, number_of_synsets, vector_file_path):
+    print("Demo illustration for: {}, {}, {}".format(word, number_of_synsets,
+                                                     vector_file_path))
     w2vUtilities = Word2VecUtilities()
     w2vUtilities.load_vectors_from(vector_file_path)
     wnUtilities = WordnetUtilities(w2vUtilities)
@@ -33,7 +32,16 @@ def main():
     print("Evaluation files for {} are under 'results' folder".format(word))
 
 if __name__ == '__main__':
+    if len(sys.argv) < 4:
+        print("Not enough arguments, using defaults")
+        word = "חתול"
+        number_of_synsets = 3
+        vector_file_path = "../data/vectors-y.bin"
+    else:
+        word = sys.argv[1]
+        number_of_synsets = int(sys.argv[2])
+        vector_file_path = sys.argv[3]
     try:
-        main()
+        main(word, number_of_synsets, vector_file_path)
     except:
         print("At least one of the input parameters isn't correct")

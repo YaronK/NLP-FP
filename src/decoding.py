@@ -3,6 +3,7 @@
 from synset.graph_extension import SynsetGraphExtension as SGE
 from utilities.word2vec import Word2VecUtilities
 from utilities.wordnet import WordnetUtilities
+import sys
 
 
 class Decoding:
@@ -22,19 +23,16 @@ class Decoding:
         return word_to_decoded_graph
 
 
-def main():
-    synsets_number = int(input("Enter the number of synsets:\n"))
-    path = input("Please write the path to the wanted" +
-                 "Hebrew words(../exps/heb_n_10.words):\n")
-
-    vector_file_path = "../data/vectors-y.bin"
-
+def main(number_of_synsets, vector_file_path, words_path):
+    print("Decoding illustration for: {}, {}, {}".format(number_of_synsets,
+                                                         vector_file_path,
+                                                         words_path))
     w2vUtilities = Word2VecUtilities()
     w2vUtilities.load_vectors_from(vector_file_path)
     wnUtilities = WordnetUtilities(w2vUtilities)
 
     decoding = Decoding(wnUtilities)
-    word_to_decoded_graph_dict = decoding.decode(synsets_number, path)
+    word_to_decoded_graph_dict = decoding.decode(number_of_synsets, words_path)
 
     for word, decoded_graph in word_to_decoded_graph_dict.items():
         baseline_graph = SGE.build_baseline_graph(word)
@@ -47,10 +45,19 @@ def main():
 
     print(word_to_decoded_graph_dict)
 
-    print("specific files can be found under 'exps' folder")
+    print("\nDecoding files can be found under 'exps' folder")
 
 if __name__ == '__main__':
+    if len(sys.argv) < 4:
+        print("Not enough arguments, using defaults")
+        number_of_synsets = 3
+        vector_file_path = "../data/vectors-y.bin"
+        words_path = "../exps/heb_n_10.words"
+    else:
+        number_of_synsets = int(sys.argv[1])
+        vector_file_path = sys.argv[2]
+        words_path = sys.argv[3]
     try:
-        main()
+        main(number_of_synsets, vector_file_path, words_path)
     except:
         print("At least one of the input parameters isn't correct")
