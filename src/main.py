@@ -1,41 +1,30 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
 from decoding import Decoding
-from evaluation import Evaluation
 from synset.graph_extension import SynsetGraphExtension as SGE
 from utilities.word2vec import Word2VecUtilities
 from utilities.wordnet import WordnetUtilities
-import sys
 
 
 def main(word, number_of_synsets, vector_file_path):
-    print("Demo illustration for: {}, {}, {}".format(word, number_of_synsets,
-                                                     vector_file_path))
+    print(("Constructing graph for {} with {} leaf synsets using vectors " +
+           "from {}").format(word, number_of_synsets, vector_file_path))
     w2vUtilities = Word2VecUtilities()
     w2vUtilities.load_vectors_from(vector_file_path)
     wnUtilities = WordnetUtilities(w2vUtilities)
 
     decoding = Decoding(wnUtilities)
-    word_to_decoded_graph_dict = dict()
-    print("Decoding: " + word)
     decoded_graph = SGE.build_word2vec_graph(word, number_of_synsets,
                                              decoding.wnUtilities)
-    word_to_decoded_graph_dict[word] = decoded_graph
-
-    evaluation = Evaluation(wnUtilities)
-    _, category_results = \
-        evaluation.evaluate(number_of_synsets, word_to_decoded_graph_dict)
-
-    print(category_results)
-
-    print("\nDecoding files for {} are under 'exps' folder".format(word))
-    print("Evaluation files for {} are under 'results' folder".format(word))
+    print(decoded_graph.display())
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
         print("Not enough arguments, using defaults")
-        word = "חתול"
-        number_of_synsets = 3
+        word = "xtwl"
+        number_of_synsets = 4
         vector_file_path = "../data/vectors-y.bin"
     else:
         word = sys.argv[1]
@@ -43,5 +32,5 @@ if __name__ == '__main__':
         vector_file_path = sys.argv[3]
     try:
         main(word, number_of_synsets, vector_file_path)
-    except:
-        print("At least one of the input parameters isn't correct")
+    except Exception as exception:
+        print(exception)

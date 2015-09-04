@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 
+from decoding import Decoding
 from synset.graph_comparison import SynsetGraphComarison
 from synset.graph_extension import SynsetGraphExtension as SGE
 from utilities.word2vec import Word2VecUtilities
 from utilities.wordnet import WordnetUtilities
-from decoding import Decoding
-import sys
 
 
 class Evaluation:
@@ -66,9 +66,8 @@ class Evaluation:
 
 
 def main(synsets_number, vector_file_path, words_path):
-    print("Evaluation illustration for: {}, {}, {}".format(number_of_synsets,
-                                                           vector_file_path,
-                                                           words_path))
+    print("Evaluation for: {}, {}, {}".format(number_of_synsets,
+                                              vector_file_path, words_path))
     w2vUtilities = Word2VecUtilities()
     w2vUtilities.load_vectors_from(vector_file_path)
     wnUtilities = WordnetUtilities(w2vUtilities)
@@ -79,12 +78,13 @@ def main(synsets_number, vector_file_path, words_path):
     evaluation = Evaluation(wnUtilities)
     evaluation.evaluate(synsets_number, word_to_decoded_graph_dict)
 
-    print("\nEvaluation files can be found under 'results' folder")
+    print("\nDecoding files can be found under 'exps' folder")
+    print("Evaluation files can be found under 'results' folder")
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
         print("Not enough arguments, using defaults")
-        number_of_synsets = 3
+        number_of_synsets = 4
         vector_file_path = "../data/vectors-y.bin"
         words_path = "../exps/heb_n_10.words"
     else:
@@ -93,5 +93,5 @@ if __name__ == '__main__':
         words_path = sys.argv[3]
     try:
         main(number_of_synsets, vector_file_path, words_path)
-    except:
-        print("At least one of the input parameters isn't correct")
+    except Exception as exception:
+        print(exception)

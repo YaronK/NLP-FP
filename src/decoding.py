@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
+import sys
+
 from synset.graph_extension import SynsetGraphExtension as SGE
 from utilities.word2vec import Word2VecUtilities
 from utilities.wordnet import WordnetUtilities
-import sys
 
 
 class Decoding:
@@ -45,12 +46,10 @@ def main(number_of_synsets, vector_file_path, words_path):
 
     print(word_to_decoded_graph_dict)
 
-    print("\nDecoding files can be found under 'exps' folder")
-
 if __name__ == '__main__':
     if len(sys.argv) < 4:
         print("Not enough arguments, using defaults")
-        number_of_synsets = 3
+        number_of_synsets = 5
         vector_file_path = "../data/vectors-y.bin"
         words_path = "../exps/heb_n_10.words"
     else:
@@ -59,5 +58,5 @@ if __name__ == '__main__':
         words_path = sys.argv[3]
     try:
         main(number_of_synsets, vector_file_path, words_path)
-    except:
-        print("At least one of the input parameters isn't correct")
+    except Exception as exception:
+        print(exception)

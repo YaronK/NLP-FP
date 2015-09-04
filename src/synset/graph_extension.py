@@ -42,7 +42,7 @@ class SynsetGraphExtension:
         synset_weights_dictionary = {node.get_synset(): node.total_weight()
                                      for node in leaf_synset_nodes}
 
-        return SynsetGraph("Thin-" + graph.name, synset_weights_dictionary)
+        return SynsetGraph(graph.name, synset_weights_dictionary)
 
     @staticmethod
     def thin_by_probability_paths(graph, number_of_leaves):
@@ -61,4 +61,4 @@ class SynsetGraphExtension:
             del synset_weights[temp_synset]
             temp_grpah = SynsetGraph("Temp", synset_weights)
 
-        return SynsetGraph("Thin-" + graph.name, chosen_synsets)
+        return SynsetGraph(graph.name, chosen_synsets)

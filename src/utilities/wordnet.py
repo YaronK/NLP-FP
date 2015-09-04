@@ -2,8 +2,8 @@
 
 from nltk.corpus import wordnet
 
-from utilities.transliteration import HebrewString
 from utilities.translation import Translator
+from utilities.transliteration import HebrewString
 
 
 class WordnetUtilities:
