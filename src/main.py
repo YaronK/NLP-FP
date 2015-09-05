@@ -23,7 +23,7 @@ def main(word, number_of_synsets, vector_file_path):
 if __name__ == '__main__':
     if len(sys.argv) < 4:
         print("Not enough arguments, using defaults")
-        word = "xtwl"
+        word = "חתול"
         number_of_synsets = 4
         vector_file_path = "../data/vectors-y.bin"
     else:

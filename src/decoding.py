@@ -49,7 +49,7 @@ def main(number_of_synsets, vector_file_path, words_path):
 if __name__ == '__main__':
     if len(sys.argv) < 4:
         print("Not enough arguments, using defaults")
-        number_of_synsets = 5
+        number_of_synsets = 4
         vector_file_path = "../data/vectors-y.bin"
         words_path = "../exps/heb_n_10.words"
     else:

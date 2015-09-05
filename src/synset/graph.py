@@ -105,7 +105,7 @@ class SynsetGraph(object):
         while(len(node.hyponym_nodes) == 1):
             node = list(node.hyponym_nodes.keys())[0]
             temp += " > " + node.synset.name()
-        temp += "({0:.3f}-{1:.3f})\n".format(node.total_probability(), node.total_weight())
+        temp += "({0:.3f})\n".format(node.total_probability())
         sorted_hyponym_nodes = sorted(node.hyponym_nodes,
                                       key=lambda n: n.get_synset().name())
         for hyponym_node in sorted_hyponym_nodes:

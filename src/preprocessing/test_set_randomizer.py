@@ -55,7 +55,7 @@ if __name__ == '__main__':
     pos = pos_to_wordnets(pos)
 
     lang = input("Please enter required language (heb for Hebrew)\n")
-
+    print("Choosing random words, it may take couple of seconds")
     try:
         write_random_words_to_file(numb_of_words, pos,
                                    lang, w2v_vector_file_path,
