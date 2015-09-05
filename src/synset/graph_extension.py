@@ -37,7 +37,8 @@ class SynsetGraphExtension:
         leaf_synset_nodes = sorted(leaf_synset_nodes,
                                    key=lambda n: n.get_synset().name())
         leaf_synset_nodes = sorted(leaf_synset_nodes,
-                                   key=lambda n: n.total_weight(),
+                                   key=lambda n: int(n.total_probability() *
+                                                     10000),
                                    reverse=True)[:number_of_leaves]
         synset_weights_dictionary = {node.get_synset(): node.total_weight()
                                      for node in leaf_synset_nodes}
@@ -54,8 +55,12 @@ class SynsetGraphExtension:
             root_node = temp_grpah.get_entity_node()
             temp_node = root_node
             while not temp_node.is_leaf():
-                temp_node = max(temp_node.get_hyponym_nodes(),
-                                key=lambda n: n.total_probability())
+                hyponym_nodes = sorted(temp_node.get_hyponym_nodes(),
+                                       key=lambda n: n.get_synset().name())
+                hyponym_nodes = sorted(hyponym_nodes,
+                                       key=lambda n: int(n.total_probability()
+                                                         * 10000))
+                temp_node = hyponym_nodes[-1]
             temp_synset = temp_node.get_synset()
             chosen_synsets[temp_synset] = temp_node.total_weight()
             del synset_weights[temp_synset]
